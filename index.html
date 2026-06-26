@@ -130,6 +130,13 @@
       padding: 0 20px;
     }
 
+    .sub-text {
+      font-size: 18px;
+      color: #8B7355;
+      margin-top: 10px;
+      padding: 0 20px;
+    }
+
     .touch-hint {
       position: fixed;
       bottom: 40px;
@@ -189,6 +196,7 @@
     <div class="progress-dots" id="progressDots"></div>
 
     <div class="pages" id="pages">
+      <!-- 第1页 - 封面 -->
       <div class="page" data-page="0">
         <div class="content">
           <div class="dog-image">
@@ -198,6 +206,7 @@
         </div>
       </div>
 
+      <!-- 第2页 - 问候第一句 -->
       <div class="page" data-page="1">
         <div class="content">
           <div class="dog-image">
@@ -207,6 +216,7 @@
         </div>
       </div>
 
+      <!-- 第3页 - 问候第二句 -->
       <div class="page" data-page="2">
         <div class="content">
           <div class="dog-image">
@@ -216,6 +226,7 @@
         </div>
       </div>
 
+      <!-- 第4页 - 放松开场 -->
       <div class="page" data-page="3">
         <div class="content">
           <div class="dog-image">
@@ -225,6 +236,7 @@
         </div>
       </div>
 
+      <!-- 第5页 - 肩颈预告 -->
       <div class="page" data-page="4">
         <div class="content">
           <div class="dog-image">
@@ -234,11 +246,24 @@
         </div>
       </div>
 
+      <!-- 第6页 - 亲自尝试 -->
       <div class="page" data-page="5">
         <div class="content">
-          <div class="video-container">
+          <div class="dog-image">
+            <img src="image/锻炼.gif" alt="小狗">
+          </div>
+          <p class="main-text">小狗亲自试过，</p>
+          <p class="sub-text">真的很有效的哦</p>
+        </div>
+      </div>
+
+      <!-- 第7页 - 肩颈视频 -->
+      <div class="page" data-page="6">
+        <div class="content">
+          <div class="video-container" id="shoulderVideoContainer">
             <iframe
-              src="https://player.bilibili.com/player.html?bvid=BV1vu411e7fC&page=1&autoplay=0"
+              id="shoulderIframe"
+              src=""
               scrolling="no"
               frameborder="0"
               allowfullscreen="true">
@@ -248,7 +273,8 @@
         </div>
       </div>
 
-      <div class="page" data-page="6">
+      <!-- 第8页 - 肩颈完成 -->
+      <div class="page" data-page="7">
         <div class="content">
           <div class="dog-image">
             <img src="image/嘿嘿.gif" alt="小狗">
@@ -257,7 +283,8 @@
         </div>
       </div>
 
-      <div class="page" data-page="7">
+      <!-- 第9页 - 腰部预告 -->
+      <div class="page" data-page="8">
         <div class="content">
           <div class="dog-image">
             <img src="image/啦啦啦.gif" alt="小狗">
@@ -266,11 +293,13 @@
         </div>
       </div>
 
-      <div class="page" data-page="8">
+      <!-- 第10页 - 腰部视频 -->
+      <div class="page" data-page="9">
         <div class="content">
-          <div class="video-container">
+          <div class="video-container" id="waistVideoContainer">
             <iframe
-              src="https://player.bilibili.com/player.html?bvid=BV1pV4y1C7eu&page=1&autoplay=0"
+              id="waistIframe"
+              src=""
               scrolling="no"
               frameborder="0"
               allowfullscreen="true">
@@ -280,7 +309,8 @@
         </div>
       </div>
 
-      <div class="page" data-page="9">
+      <!-- 第11页 - 腰部完成 -->
+      <div class="page" data-page="10">
         <div class="content">
           <div class="dog-image">
             <img src="image/送你花花.gif" alt="小狗">
@@ -294,10 +324,23 @@
   </div>
 
   <script>
-    const TOTAL_PAGES = 10;
+    const TOTAL_PAGES = 11;
     let currentPage = 0;
     let touchStartX = 0;
 
+    // 本地存储键名
+    const STORAGE_KEYS = {
+      shoulderVideo: 'relaxDog_shoulderVideoTime',
+      waistVideo: 'relaxDog_waistVideoTime'
+    };
+
+    // B站视频ID
+    const VIDEO_IDS = {
+      shoulder: 'BV1vu411e7fC',
+      waist: 'BV1pV4y1C7eu'
+    };
+
+    // 生成星星
     function createStars() {
       const starsContainer = document.getElementById('stars');
       const starCount = Math.floor(Math.random() * 6) + 15;
@@ -315,6 +358,7 @@
       }
     }
 
+    // 生成进度点
     function createProgressDots() {
       const container = document.getElementById('progressDots');
       container.innerHTML = '';
@@ -326,8 +370,55 @@
       }
     }
 
+    // 保存视频进度
+    function saveVideoProgress() {
+      const shoulderIframe = document.getElementById('shoulderIframe');
+      const waistIframe = document.getElementById('waistIframe');
+
+      // 尝试从iframe获取播放进度
+      try {
+        // 由于跨域限制，直接使用当前URL参数中的时间
+        const shoulderSrc = shoulderIframe.src;
+        const waistSrc = waistIframe.src;
+
+        // 保存当前播放URL（包含时间参数）
+        localStorage.setItem(STORAGE_KEYS.shoulderVideo, shoulderSrc);
+        localStorage.setItem(STORAGE_KEYS.waistVideo, waistSrc);
+      } catch (e) {
+        console.log('无法保存视频进度:', e);
+      }
+    }
+
+    // 加载视频进度
+    function loadVideoProgress(iframe, storageKey) {
+      const savedSrc = localStorage.getItem(storageKey);
+      if (savedSrc) {
+        iframe.src = savedSrc;
+      } else {
+        // 默认播放地址（不自动播放）
+        const videoId = storageKey === STORAGE_KEYS.shoulderVideo ? VIDEO_IDS.shoulder : VIDEO_IDS.waist;
+        iframe.src = `https://player.bilibili.com/player.html?bvid=${videoId}&page=1&autoplay=0`;
+      }
+    }
+
+    // 跳转到指定页面
     function goToPage(index) {
       if (index < 0 || index >= TOTAL_PAGES) return;
+
+      // 如果从视频页离开，保存进度
+      if (currentPage === 6 || currentPage === 9) {
+        saveVideoProgress();
+      }
+
+      // 关闭当前视频（如果是视频页）
+      if (index !== 6) {
+        const shoulderIframe = document.getElementById('shoulderIframe');
+        shoulderIframe.src = '';
+      }
+      if (index !== 9) {
+        const waistIframe = document.getElementById('waistIframe');
+        waistIframe.src = '';
+      }
 
       currentPage = index;
       const pages = document.getElementById('pages');
@@ -345,6 +436,13 @@
       }
 
       document.querySelectorAll('.page')[currentPage].classList.add('page-enter');
+
+      // 进入视频页时恢复播放进度
+      if (currentPage === 6) {
+        loadVideoProgress(document.getElementById('shoulderIframe'), STORAGE_KEYS.shoulderVideo);
+      } else if (currentPage === 9) {
+        loadVideoProgress(document.getElementById('waistIframe'), STORAGE_KEYS.waistVideo);
+      }
     }
 
     function nextPage() {
