@@ -3,11 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>瑶瑶的放松小狗</title>
-
-  <!-- 预加载关键资源 -->
-  <link rel="preconnect" href="https://player.bilibili.com">
-  <link rel="dns-prefetch" href="https://player.bilibili.com">
 
   <style>
     * {
@@ -17,40 +15,25 @@
       -webkit-tap-highlight-color: transparent;
     }
 
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
-      background-color: #FFF8DC;
-      color: #5D4E37;
+    html, body {
+      width: 100%;
+      height: 100%;
       overflow: hidden;
       touch-action: pan-y;
       user-select: none;
       -webkit-user-select: none;
     }
 
-    /* 图片占位加载 */
-    .dog-image {
-      width: 280px;
-      height: 280px;
-      margin-bottom: 40px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: rgba(255, 248, 220, 0.5);
-      border-radius: 20px;
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+      background-color: #FFF8DC;
+      color: #5D4E37;
+      position: fixed;
+      width: 100%;
+      height: 100%;
     }
 
-    .dog-image img {
-      max-width: 100%;
-      max-height: 100%;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
-
-    .dog-image img.loaded {
-      opacity: 1;
-    }
-
-    /* 星星背景优化 - 使用CSS动画减少重绘 */
+    /* 星星背景 - 减少数量优化性能 */
     .stars {
       position: fixed;
       top: 0;
@@ -65,26 +48,20 @@
     .star {
       position: absolute;
       border-radius: 50%;
-      background: rgba(255, 255, 255, 0.6);
-      box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
-      animation: floatStar 4s ease-in-out infinite, breathe 3s ease-in-out infinite alternate;
-      will-change: transform, opacity;
+      background: rgba(255, 255, 255, 0.7);
+      animation: twinkle 3s ease-in-out infinite;
+      will-change: opacity;
     }
 
-    @keyframes floatStar {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
-    }
-
-    @keyframes breathe {
-      0% { opacity: 0.4; }
-      100% { opacity: 0.9; }
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 0.8; }
     }
 
     .app {
       position: relative;
       width: 100%;
-      height: 100vh;
+      height: 100%;
       overflow: hidden;
     }
 
@@ -92,7 +69,7 @@
       display: flex;
       width: 100%;
       height: 100%;
-      transition: transform 0.3s ease;
+      transition: transform 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
       will-change: transform;
     }
 
@@ -107,25 +84,27 @@
       position: relative;
       z-index: 10;
       padding: 20px;
-      contain: layout style paint;
+      padding-top: 70px;
+      padding-bottom: 60px;
+      -webkit-overflow-scrolling: touch;
     }
 
     .progress-dots {
       position: fixed;
-      top: 30px;
+      top: 20px;
       left: 50%;
       transform: translateX(-50%);
       display: flex;
-      gap: 12px;
+      gap: 8px;
       z-index: 100;
     }
 
     .progress-dot {
-      width: 10px;
-      height: 10px;
+      width: 8px;
+      height: 8px;
       border-radius: 50%;
       background-color: rgba(93, 78, 55, 0.3);
-      transition: all 0.3s ease;
+      transition: all 0.2s ease;
     }
 
     .progress-dot.active {
@@ -140,36 +119,54 @@
       text-align: center;
     }
 
+    .dog-image {
+      width: 240px;
+      height: 240px;
+      margin-bottom: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 248, 220, 0.6);
+      border-radius: 20px;
+    }
+
+    .dog-image img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      border-radius: 15px;
+    }
+
     .main-text {
-      font-size: 24px;
+      font-size: 22px;
       font-weight: 500;
       color: #5D4E37;
-      line-height: 1.6;
-      padding: 0 20px;
+      line-height: 1.5;
+      padding: 0 15px;
     }
 
     .sub-text {
-      font-size: 18px;
+      font-size: 16px;
       color: #8B7355;
       margin-top: 10px;
-      padding: 0 20px;
+      padding: 0 15px;
     }
 
     .small-text {
-      font-size: 14px;
+      font-size: 13px;
       color: #A0937D;
       margin-top: 8px;
-      padding: 0 20px;
+      padding: 0 15px;
       line-height: 1.5;
     }
 
     .touch-hint {
       position: fixed;
-      bottom: 40px;
+      bottom: 25px;
       left: 0;
       right: 0;
       text-align: center;
-      font-size: 14px;
+      font-size: 13px;
       color: #A0937D;
       animation: pulse 2s ease-in-out infinite;
       z-index: 100;
@@ -181,8 +178,8 @@
     }
 
     .video-wrapper {
-      width: 100%;
-      max-width: 400px;
+      width: 95%;
+      max-width: 380px;
       margin-bottom: 20px;
       background: #FFF8DC;
       border-radius: 12px;
@@ -191,51 +188,41 @@
 
     .video-wrapper iframe {
       width: 100%;
-      height: 225px;
+      height: 220px;
       border: none;
       display: block;
     }
 
     .video-label {
-      font-size: 16px;
+      font-size: 15px;
       color: #8B7355;
       margin-top: 10px;
     }
 
-    .page-enter {
-      animation: fadeInUp 0.3s ease-out;
-    }
-
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
     .music-control {
       position: fixed;
-      top: 30px;
-      right: 20px;
-      width: 44px;
-      height: 44px;
+      top: env(safe-area-inset-top, 20px);
+      top: calc(env(safe-area-inset-top, 20px) + 5px);
+      right: 15px;
+      width: 38px;
+      height: 38px;
       border-radius: 50%;
-      background: rgba(93, 78, 55, 0.8);
+      background: rgba(93, 78, 55, 0.9);
       display: flex;
       align-items: center;
       justify-content: center;
       z-index: 200;
       cursor: pointer;
-      transition: transform 0.2s;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
     }
 
-    .music-control:active { transform: scale(0.9); }
-
     .music-icon {
-      font-size: 20px;
+      font-size: 18px;
       color: #fff;
     }
 
     .music-control.playing .music-icon {
-      animation: rotate 3s linear infinite;
+      animation: rotate 4s linear infinite;
     }
 
     @keyframes rotate {
@@ -247,53 +234,49 @@
       display: flex;
       align-items: flex-end;
       justify-content: center;
-      gap: 10px;
-      margin-bottom: 30px;
+      gap: 20px;
+      margin-bottom: 25px;
     }
 
     .heat-item {
-      position: relative;
+      text-align: center;
     }
 
-    .heat-item img, .heat-item {
-      width: 120px;
+    .heat-item img {
+      width: 100px;
       height: auto;
     }
 
     .heat-label {
-      position: absolute;
-      bottom: -25px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 14px;
+      display: block;
+      font-size: 13px;
       color: #8B7355;
-      white-space: nowrap;
+      margin-top: 8px;
     }
 
     .gel-image {
-      width: 200px;
+      width: 160px;
       height: auto;
-      margin-bottom: 30px;
+      margin-bottom: 25px;
     }
 
     .text-line {
-      font-size: 18px;
+      font-size: 15px;
       color: #8B7355;
       margin-top: 12px;
-      padding: 0 20px;
+      padding: 0 15px;
       line-height: 1.6;
     }
 
     .text-line.small {
-      font-size: 14px;
+      font-size: 12px;
       color: #A0937D;
     }
 
-    /* 选择页按钮样式 */
     .choice-buttons {
       display: flex;
-      gap: 40px;
-      margin-top: 30px;
+      gap: 35px;
+      margin-top: 25px;
       opacity: 0;
       transition: opacity 0.3s ease;
     }
@@ -303,22 +286,24 @@
     }
 
     .choice-btn {
-      width: 120px;
-      height: 60px;
-      border-radius: 30px;
-      background: rgba(255, 248, 220, 0.9);
+      width: 100px;
+      height: 50px;
+      border-radius: 25px;
+      background: rgba(255, 248, 220, 0.95);
       border: 2px solid #5D4E37;
-      font-size: 24px;
+      font-size: 20px;
       color: #5D4E37;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      transition: all 0.3s ease;
+      transition: all 0.2s ease;
     }
 
     .choice-btn:active {
       transform: scale(0.95);
+      background: #5D4E37;
+      color: #FFF8DC;
     }
 
     .choice-btn.disabled {
@@ -329,32 +314,29 @@
       display: none;
     }
 
-    .choice-btn:hover {
-      background: #FFF8DC;
-    }
-
     .result-text {
       margin-top: 20px;
-      font-size: 18px;
+      font-size: 16px;
       color: #8B7355;
       line-height: 1.8;
       text-align: center;
+      padding: 0 20px;
     }
 
     .small-hint {
-      font-size: 14px;
+      font-size: 13px;
       color: #A0937D;
-      margin-top: 10px;
+      margin-top: 12px;
     }
   </style>
 </head>
 <body>
   <!-- 预加载音频 -->
-  <audio id="bgMusic" preload="auto">
+  <audio id="bgMusic" preload="auto" loop>
     <source src="video/背景音乐.m4a" type="audio/mp4">
   </audio>
 
-  <div class="music-control" id="musicControl" onclick="toggleMusic()">
+  <div class="music-control" id="musicControl">
     <span class="music-icon" id="musicIcon">♪</span>
   </div>
 
@@ -365,42 +347,42 @@
     <div class="pages" id="pages">
       <div class="page" data-page="0">
         <div class="content">
-          <div class="dog-image"><img src="image/来了.gif" alt="小狗" loading="lazy"></div>
+          <div class="dog-image"><img src="image/来了.gif" alt="小狗"></div>
           <p class="main-text">瑶瑶，欢迎回家呀</p>
         </div>
       </div>
 
       <div class="page" data-page="1">
         <div class="content">
-          <div class="dog-image"><img src="image/汪汪.gif" alt="小狗" loading="lazy"></div>
+          <div class="dog-image"><img src="image/汪汪.gif" alt="小狗"></div>
           <p class="main-text">今天也认认真真忙了一整天对不对</p>
         </div>
       </div>
 
       <div class="page" data-page="2">
         <div class="content">
-          <div class="dog-image"><img src="image/凌乱.gif" alt="小狗" loading="lazy"></div>
+          <div class="dog-image"><img src="image/凌乱.gif" alt="小狗"></div>
           <p class="main-text">是不是累得都蔫蔫啦</p>
         </div>
       </div>
 
       <div class="page" data-page="3">
         <div class="content">
-          <div class="dog-image"><img src="image/转圈圈.gif" alt="小狗" loading="lazy"></div>
+          <div class="dog-image"><img src="image/转圈圈.gif" alt="小狗"></div>
           <p class="main-text">来跟着小狗慢慢舒展一下身体吧</p>
         </div>
       </div>
 
       <div class="page" data-page="4">
         <div class="content">
-          <div class="dog-image"><img src="image/期待.gif" alt="小狗" loading="lazy"></div>
+          <div class="dog-image"><img src="image/期待.gif" alt="小狗"></div>
           <p class="main-text">先松一松僵掉的肩颈，好不好</p>
         </div>
       </div>
 
       <div class="page" data-page="5">
         <div class="content">
-          <div class="dog-image"><img src="image/锻炼.gif" alt="小狗" loading="lazy"></div>
+          <div class="dog-image"><img src="image/锻炼.gif" alt="小狗"></div>
           <p class="main-text">小狗亲自试过，</p>
           <p class="sub-text">真的很有效的哦</p>
         </div>
@@ -408,42 +390,42 @@
 
       <div class="page" data-page="6">
         <div class="content">
-          <div class="video-wrapper"><iframe id="shoulderVideo" src="" loading="lazy"></iframe></div>
+          <div class="video-wrapper"><iframe id="shoulderVideo" src=""></iframe></div>
           <p class="video-label">肩颈舒缓</p>
         </div>
       </div>
 
       <div class="page" data-page="7">
         <div class="content">
-          <div class="dog-image"><img src="image/嘿嘿.gif" alt="小狗" loading="lazy"></div>
+          <div class="dog-image"><img src="image/嘿嘿.gif" alt="小狗"></div>
           <p class="main-text">瑶瑶超棒的～肩膀是不是松快一点啦</p>
         </div>
       </div>
 
       <div class="page" data-page="8">
         <div class="content">
-          <div class="dog-image"><img src="image/啦啦啦.gif" alt="小狗" loading="lazy"></div>
+          <div class="dog-image"><img src="image/啦啦啦.gif" alt="小狗"></div>
           <p class="main-text">接着来拉一拉坐酸了的腰吧</p>
         </div>
       </div>
 
       <div class="page" data-page="9">
         <div class="content">
-          <div class="video-wrapper"><iframe id="waistVideo" src="" loading="lazy"></iframe></div>
+          <div class="video-wrapper"><iframe id="waistVideo" src=""></iframe></div>
           <p class="video-label">腰部舒缓</p>
         </div>
       </div>
 
       <div class="page" data-page="10">
         <div class="content">
-          <div class="dog-image"><img src="image/送你花花.gif" alt="小狗" loading="lazy"></div>
+          <div class="dog-image"><img src="image/送你花花.gif" alt="小狗"></div>
           <p class="main-text">太厉害啦～腰是不是舒服多啦</p>
         </div>
       </div>
 
       <div class="page" data-page="11">
         <div class="content">
-          <div class="dog-image"><img src="image/有我呢.gif" alt="小狗" loading="lazy"></div>
+          <div class="dog-image"><img src="image/有我呢.gif" alt="小狗"></div>
           <p class="main-text">对啦～</p>
           <p class="text-line">要是胸口有点胀胀的不舒服</p>
           <p class="small-text">小狗有几个温柔的小办法哦</p>
@@ -454,8 +436,8 @@
         <div class="content">
           <p class="text-line">第一个小办法 · 冷热交替敷</p>
           <div class="heat-cold-container">
-            <div class="heat-item"><img src="image/热水袋.png" alt="热水袋" loading="lazy"><span class="heat-label">3分钟</span></div>
-            <div class="heat-item"><img src="image/毛巾.png" alt="毛巾" loading="lazy"><span class="heat-label">1分钟</span></div>
+            <div class="heat-item"><img src="image/热水袋.png" alt="热水袋"><span class="heat-label">3分钟</span></div>
+            <div class="heat-item"><img src="image/毛巾.png" alt="毛巾"><span class="heat-label">1分钟</span></div>
           </div>
           <p class="text-line">暖水袋温敷3分钟，冷水湿毛巾敷1分钟</p>
           <p class="text-line small">重复3轮，胀胀的感觉会轻很多哦</p>
@@ -464,7 +446,7 @@
 
       <div class="page" data-page="13">
         <div class="content">
-          <div class="dog-image"><img src="image/吃饭饭.gif" alt="小狗" loading="lazy"></div>
+          <div class="dog-image"><img src="image/吃饭饭.gif" alt="小狗"></div>
           <p class="text-line">少喝奶茶、可乐、浓茶哦</p>
           <p class="text-line">吃清淡少盐，胀感会悄悄减轻</p>
           <p class="text-line">平时吃点坚果，香蕉也有帮助呀</p>
@@ -475,7 +457,7 @@
       <div class="page" data-page="14">
         <div class="content">
           <p class="main-text">还有一个小提醒呀</p>
-          <img class="gel-image" src="image/布洛芬凝胶.png" alt="凝胶" loading="lazy">
+          <img class="gel-image" src="image/布洛芬凝胶.png" alt="凝胶">
           <p class="text-line">要是胀感实在明显</p>
           <p class="text-line">可以问问医生能不能用外用凝胶</p>
           <p class="text-line small">一定要听医生的话使用哦</p>
@@ -484,7 +466,7 @@
 
       <div class="page" data-page="15">
         <div class="content">
-          <div class="dog-image"><img src="image/撒花花.gif" alt="小狗" loading="lazy"></div>
+          <div class="dog-image"><img src="image/撒花花.gif" alt="小狗"></div>
           <p class="main-text">瑶瑶超厉害！全部都完成啦～</p>
           <p class="sub-text">今天也辛苦啦，好好歇一歇吧</p>
         </div>
@@ -492,75 +474,68 @@
 
       <div class="page" data-page="16">
         <div class="content">
-          <div class="dog-image"><img src="image/喜欢.gif" alt="小狗" loading="lazy"></div>
+          <div class="dog-image"><img src="image/喜欢.gif" alt="小狗"></div>
           <p class="main-text">现在有没有舒服一点呀？</p>
           <p class="sub-text">瑶瑶开心的话，小狗也会跟着开心哦</p>
         </div>
       </div>
 
-      <!-- 第18页 - 学习 -->
       <div class="page" data-page="17">
         <div class="content">
-          <div class="dog-image"><img src="image/学习.gif" alt="小狗" loading="lazy"></div>
+          <div class="dog-image"><img src="image/学习.gif" alt="小狗"></div>
           <p class="main-text">这是小狗学Ai顺便做的呢</p>
           <p class="sub-text">小狗是不是很厉害</p>
         </div>
       </div>
 
-      <!-- 第19页 - 完成 -->
       <div class="page" data-page="18">
         <div class="content">
-          <div class="dog-image"><img src="image/完成.gif" alt="小狗" loading="lazy"></div>
+          <div class="dog-image"><img src="image/完成.gif" alt="小狗"></div>
           <p class="main-text">小狗一边学一边做</p>
           <p class="sub-text">掌握了不少东西呢！</p>
         </div>
       </div>
 
-      <!-- 第20页 - 依偎 -->
       <div class="page" data-page="19">
         <div class="content">
-          <div class="dog-image"><img src="image/依偎.gif" alt="小狗" loading="lazy"></div>
+          <div class="dog-image"><img src="image/依偎.gif" alt="小狗"></div>
           <p class="main-text">小狗知道瑶瑶在乎小狗</p>
           <p class="sub-text">所以为小狗想了很多很多</p>
         </div>
       </div>
 
-      <!-- 第21页 - 快乐 -->
       <div class="page" data-page="20">
         <div class="content">
-          <div class="dog-image"><img src="image/快乐.gif" alt="小狗" loading="lazy"></div>
+          <div class="dog-image"><img src="image/快乐.gif" alt="小狗"></div>
           <p class="main-text">你看，小狗心里挂念着瑶瑶</p>
           <p class="sub-text">小狗会学得更用心，更踏实呢！</p>
         </div>
       </div>
 
-      <!-- 第22页 - 更好更好 -->
       <div class="page" data-page="21">
         <div class="content">
-          <div class="dog-image"><img src="image/更好更好.gif" alt="小狗" loading="lazy"></div>
+          <div class="dog-image"><img src="image/更好更好.gif" alt="小狗"></div>
           <p class="main-text">所以小狗相信，我们拥有彼此</p>
           <p class="sub-text">未来一定会更好更好的呢！</p>
         </div>
       </div>
 
-      <!-- 第23页 - 所以 -->
       <div class="page" data-page="22">
         <div class="content">
-          <p class="main-text" style="font-size: 48px;">所以……</p>
+          <p class="main-text" style="font-size: 36px;">所以……</p>
         </div>
       </div>
 
-      <!-- 第24页 - 选择页 -->
       <div class="page" data-page="23" id="choicePage">
         <div class="content">
           <div class="dog-image">
-            <img id="choiceDogImg" src="image/哭唧唧.gif" alt="小狗" loading="lazy">
+            <img id="choiceDogImg" src="image/哭唧唧.gif" alt="小狗">
           </div>
-          <p id="choiceMainText" class="sub-text" style="font-size: 32px; font-weight: bold; color: #5D4E37;">不要再赶小狗走了</p>
-          <p id="choiceQuestion" class="main-text" style="font-size: 48px; margin-top: 20px; opacity: 0;">好不好</p>
+          <p id="choiceMainText" class="sub-text" style="font-size: 26px; font-weight: bold; color: #5D4E37;">不要再赶小狗走了</p>
+          <p id="choiceQuestion" class="main-text" style="font-size: 40px; margin-top: 15px; opacity: 0;">好不好</p>
           <div id="choiceButtons" class="choice-buttons">
-            <div class="choice-btn" id="btnYes" onclick="chooseYes()">好</div>
-            <div class="choice-btn" id="btnNo" onclick="chooseNo()">不好</div>
+            <div class="choice-btn" id="btnYes">好</div>
+            <div class="choice-btn" id="btnNo">不好</div>
           </div>
           <p id="choiceResult" class="result-text" style="display: none;"></p>
           <p id="choiceHint" class="small-hint" style="display: none;"></p>
@@ -575,48 +550,73 @@
     const TOTAL_PAGES = 24;
     let currentPage = 0;
     let touchStartX = 0;
+    let touchStartY = 0;
     let musicPlaying = false;
     let musicInitialized = false;
+    let choiceMade = false;
+    let noClickCount = 0;
 
     const bgMusic = document.getElementById('bgMusic');
     const musicControl = document.getElementById('musicControl');
     const musicIcon = document.getElementById('musicIcon');
+    const pagesEl = document.getElementById('pages');
+    const touchHint = document.getElementById('touchHint');
 
-    const SHOULDER_VIDEO_URL = 'https://player.bilibili.com/player.html?bvid=BV1vu411e7fC&page=1&autoplay=1';
-    const WAIST_VIDEO_URL = 'https://player.bilibili.com/player.html?bvid=BV1pV4y1C7eu&page=1&autoplay=1';
+    const SHOULDER_VIDEO_URL = 'https://player.bilibili.com/player.html?bvid=BV1vu411e7fC&page=1&autoplay=0';
+    const WAIST_VIDEO_URL = 'https://player.bilibili.com/player.html?bvid=BV1pV4y1C7eu&page=1&autoplay=0';
 
     const shoulderVideo = document.getElementById('shoulderVideo');
     const waistVideo = document.getElementById('waistVideo');
 
-    // 图片渐入效果
-    function initImageLoading() {
-      const images = document.querySelectorAll('.dog-image img, .gel-image');
-      images.forEach(img => {
-        if (img.complete) {
-          img.classList.add('loaded');
-        } else {
-          img.onload = () => img.classList.add('loaded');
-        }
-      });
+    // 图片预加载
+    const imageList = [
+      'image/来了.gif', 'image/汪汪.gif', 'image/凌乱.gif', 'image/转圈圈.gif', 'image/期待.gif',
+      'image/锻炼.gif', 'image/嘿嘿.gif', 'image/啦啦啦.gif', 'image/送你花花.gif', 'image/有我呢.gif',
+      'image/吃饭饭.gif', 'image/撒花花.gif', 'image/喜欢.gif', 'image/学习.gif', 'image/完成.gif',
+      'image/依偎.gif', 'image/快乐.gif', 'image/更好更好.gif', 'image/哭唧唧.gif', 'image/呜呜呜.gif',
+      'image/呀呼.gif', 'image/拉粑粑.gif'
+    ];
+
+    const preloadedImages = new Set();
+
+    function preloadImage(src) {
+      if (preloadedImages.has(src)) return;
+      preloadedImages.add(src);
+      const img = new Image();
+      img.src = src;
+    }
+
+    function preloadNearbyImages(index) {
+      const indices = [index - 1, index, index + 1].filter(i => i >= 0 && i < imageList.length);
+      indices.forEach(i => preloadImage(imageList[i]));
+    }
+
+    // 预加载所有图片
+    function preloadAllImages() {
+      imageList.forEach(src => preloadImage(src));
+    }
+
+    // 播放音乐
+    function playMusic() {
+      if (musicPlaying) return;
+      const playPromise = bgMusic.play();
+      if (playPromise !== undefined) {
+        playPromise.then(() => {
+          musicPlaying = true;
+          musicIcon.textContent = '♫';
+          musicControl.classList.add('playing');
+        }).catch(() => {});
+      }
     }
 
     // 切换音乐
     function toggleMusic() {
       if (!musicInitialized) {
-        // 首次点击时初始化音频
-        bgMusic.load();
         musicInitialized = true;
       }
 
       if (bgMusic.paused) {
-        const playPromise = bgMusic.play();
-        if (playPromise !== undefined) {
-          playPromise.then(() => {
-            musicPlaying = true;
-            musicIcon.textContent = '♫';
-            musicControl.classList.add('playing');
-          }).catch(e => console.log('播放失败:', e));
-        }
+        playMusic();
       } else {
         bgMusic.pause();
         musicPlaying = false;
@@ -628,18 +628,18 @@
     // 生成星星
     function createStars() {
       const starsContainer = document.getElementById('stars');
-      const starCount = 15;
+      starsContainer.innerHTML = '';
+      const starCount = window.innerWidth < 400 ? 10 : 15;
 
       for (let i = 0; i < starCount; i++) {
         const star = document.createElement('div');
         star.className = 'star';
         star.style.left = Math.random() * 100 + '%';
         star.style.top = Math.random() * 100 + '%';
-        const size = Math.floor(Math.random() * 9) + 6;
+        const size = Math.floor(Math.random() * 6) + 5;
         star.style.width = size + 'px';
         star.style.height = size + 'px';
-        star.style.animationDelay = (Math.random() * 5) + 's';
-        star.style.animationDuration = (3 + Math.random() * 3) + 's';
+        star.style.animationDelay = (Math.random() * 3) + 's';
         starsContainer.appendChild(star);
       }
     }
@@ -656,77 +656,6 @@
     }
 
     // 页面切换
-    // 选择页状态
-    let choiceMade = false;
-    let noClickCount = 0;
-
-    // 选择「好」
-    function chooseYes() {
-      if (choiceMade) return;
-      choiceMade = true;
-
-      // 切换表情为呀呼
-      document.getElementById('choiceDogImg').src = 'image/呀呼.gif';
-
-      // 隐藏按钮
-      document.getElementById('choiceButtons').classList.remove('show');
-      document.getElementById('choiceButtons').style.display = 'none';
-      document.getElementById('choiceQuestion').style.display = 'none';
-
-      // 显示结果文字
-      document.getElementById('choiceMainText').style.display = 'none';
-      document.getElementById('choiceResult').style.display = 'block';
-      document.getElementById('choiceResult').innerHTML = '瑶瑶最好了！快去找小狗吧！<br>他一定很想很想你';
-
-      // 2秒后关闭
-      setTimeout(() => {
-        // 尝试跳转微信
-        window.location.href = 'weixin://';
-        // 如果跳转失败，显示提示
-        setTimeout(() => {
-          alert('可以打开微信找小狗啦～');
-        }, 1000);
-      }, 2000);
-    }
-
-    // 选择「不好」
-    function chooseNo() {
-      noClickCount++;
-
-      if (noClickCount === 1) {
-        // 第一次点不好
-        document.getElementById('choiceDogImg').src = 'image/呜呜呜.gif';
-        document.getElementById('choiceMainText').textContent = '呜……不行的呀，小狗已经赖上瑶瑶了';
-        document.getElementById('btnNo').classList.add('disabled');
-        document.getElementById('choiceHint').style.display = 'block';
-        document.getElementById('choiceHint').textContent = '就选好嘛～';
-      } else if (noClickCount >= 2) {
-        // 第二次点不好
-        document.getElementById('choiceDogImg').src = 'image/拉粑粑.gif';
-        document.getElementById('choiceMainText').textContent = '哼，请坏瑶瑶吃大便！！';
-        document.getElementById('btnNo').classList.add('hidden');
-        document.getElementById('choiceHint').style.display = 'none';
-      }
-    }
-
-    // 初始化选择页
-    function initChoicePage() {
-      const choicePage = document.getElementById('choicePage');
-      const question = document.getElementById('choiceQuestion');
-      const buttons = document.getElementById('choiceButtons');
-
-      // 0.5秒后显示好不好
-      setTimeout(() => {
-        question.style.opacity = '1';
-        question.style.transition = 'opacity 0.3s ease';
-      }, 500);
-
-      // 1秒后显示按钮
-      setTimeout(() => {
-        buttons.classList.add('show');
-      }, 1000);
-    }
-
     function goToPage(index) {
       if (index < 0 || index >= TOTAL_PAGES) return;
 
@@ -734,19 +663,16 @@
       if (index !== 23) {
         choiceMade = false;
         noClickCount = 0;
-        const choicePage = document.getElementById('choicePage');
-        if (choicePage) {
-          document.getElementById('choiceDogImg').src = 'image/哭唧唧.gif';
-          document.getElementById('choiceMainText').style.display = 'block';
-          document.getElementById('choiceMainText').textContent = '不要再赶小狗走了';
-          document.getElementById('choiceQuestion').style.display = 'block';
-          document.getElementById('choiceQuestion').style.opacity = '0';
-          document.getElementById('choiceButtons').style.display = 'flex';
-          document.getElementById('choiceButtons').classList.remove('show');
-          document.getElementById('choiceResult').style.display = 'none';
-          document.getElementById('choiceHint').style.display = 'none';
-          document.getElementById('btnNo').classList.remove('disabled', 'hidden');
-        }
+        document.getElementById('choiceDogImg').src = 'image/哭唧唧.gif';
+        document.getElementById('choiceMainText').style.display = 'block';
+        document.getElementById('choiceMainText').textContent = '不要再赶小狗走了';
+        document.getElementById('choiceQuestion').style.display = 'block';
+        document.getElementById('choiceQuestion').style.opacity = '0';
+        document.getElementById('choiceButtons').style.display = 'flex';
+        document.getElementById('choiceButtons').classList.remove('show');
+        document.getElementById('choiceResult').style.display = 'none';
+        document.getElementById('choiceHint').style.display = 'none';
+        document.getElementById('btnNo').classList.remove('disabled', 'hidden');
       }
 
       // 离开视频页
@@ -754,16 +680,13 @@
       if (currentPage === 9) waistVideo.src = '';
 
       currentPage = index;
-      document.getElementById('pages').style.transform = `translateX(-${currentPage * 100}%)`;
+      pagesEl.style.transform = `translateX(-${currentPage * 100}%)`;
 
       document.querySelectorAll('.progress-dot').forEach((dot, i) => {
         dot.className = 'progress-dot' + (i === currentPage ? ' active' : '');
       });
 
-      document.getElementById('touchHint').textContent =
-        currentPage === TOTAL_PAGES - 1 ? '请做出选择' : '点击任意处继续';
-
-      document.querySelectorAll('.page')[currentPage].classList.add('page-enter');
+      touchHint.textContent = currentPage === TOTAL_PAGES - 1 ? '请做出选择' : '点击任意处继续';
 
       // 进入视频页
       if (currentPage === 6) {
@@ -772,9 +695,12 @@
       } else if (currentPage === 9) {
         waistVideo.src = WAIST_VIDEO_URL;
         if (musicPlaying) bgMusic.pause();
-      } else if (musicInitialized && musicPlaying && bgMusic.paused) {
+      } else if (musicPlaying && bgMusic.paused) {
         bgMusic.play().catch(() => {});
       }
+
+      // 预加载相邻图片
+      preloadNearbyImages(currentPage);
 
       // 进入选择页
       if (currentPage === 23) {
@@ -790,44 +716,126 @@
       if (currentPage > 0) goToPage(currentPage - 1);
     }
 
+    // 选择「好」
+    function chooseYes() {
+      if (choiceMade) return;
+      choiceMade = true;
+
+      document.getElementById('choiceDogImg').src = 'image/呀呼.gif';
+      document.getElementById('choiceButtons').classList.remove('show');
+      document.getElementById('choiceButtons').style.display = 'none';
+      document.getElementById('choiceQuestion').style.display = 'none';
+      document.getElementById('choiceMainText').style.display = 'none';
+      document.getElementById('choiceResult').style.display = 'block';
+      document.getElementById('choiceResult').innerHTML = '瑶瑶最好了！快去找小狗吧！<br>他一定很想很想你';
+
+      setTimeout(() => {
+        window.location.href = 'weixin://';
+        setTimeout(() => {
+          alert('可以打开微信找小狗啦～');
+        }, 1000);
+      }, 2000);
+    }
+
+    // 选择「不好」
+    function chooseNo() {
+      noClickCount++;
+
+      if (noClickCount === 1) {
+        document.getElementById('choiceDogImg').src = 'image/呜呜呜.gif';
+        document.getElementById('choiceMainText').textContent = '呜……不行的呀，小狗已经赖上瑶瑶了';
+        document.getElementById('btnNo').classList.add('disabled');
+        document.getElementById('choiceHint').style.display = 'block';
+        document.getElementById('choiceHint').textContent = '就选好嘛～';
+      } else if (noClickCount >= 2) {
+        document.getElementById('choiceDogImg').src = 'image/拉粑粑.gif';
+        document.getElementById('choiceMainText').textContent = '哼，请坏瑶瑶吃大便！！';
+        document.getElementById('btnNo').classList.add('hidden');
+        document.getElementById('choiceHint').style.display = 'none';
+      }
+    }
+
+    // 初始化选择页
+    function initChoicePage() {
+      const question = document.getElementById('choiceQuestion');
+      const buttons = document.getElementById('choiceButtons');
+
+      setTimeout(() => {
+        question.style.opacity = '1';
+      }, 300);
+
+      setTimeout(() => {
+        buttons.classList.add('show');
+      }, 800);
+    }
+
     // 事件监听
     document.addEventListener('touchstart', e => {
       touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+
+      // 首次触摸时尝试播放音乐
+      if (!musicInitialized) {
+        musicInitialized = true;
+        bgMusic.load();
+        playMusic();
+      }
     }, { passive: true });
 
     document.addEventListener('touchend', e => {
       const deltaX = e.changedTouches[0].clientX - touchStartX;
-      if (Math.abs(deltaX) > 50) {
+      const deltaY = e.changedTouches[0].clientY - touchStartY;
+
+      // 水平滑动大于垂直滑动才翻页
+      if (Math.abs(deltaX) > 30 && Math.abs(deltaX) > Math.abs(deltaY)) {
         deltaX < 0 ? nextPage() : prevPage();
       }
     }, { passive: true });
 
+    // 点击事件
     document.querySelector('.app').addEventListener('click', e => {
-      // 选择页按钮不触发翻页
       if (e.target.closest('.choice-btn')) return;
-      if (e.target.tagName === 'IFRAME' || e.target.closest('.music-control')) return;
+      if (e.target.tagName === 'IFRAME') return;
+      if (e.target.closest('.music-control')) return;
       nextPage();
     });
 
-    // 用户首次交互后自动播放音乐
-    document.addEventListener('touchstart', function initAudio() {
-      if (!musicInitialized) {
-        bgMusic.load();
-        musicInitialized = true;
-        bgMusic.play().then(() => {
-          musicPlaying = true;
-          musicIcon.textContent = '♫';
-          musicControl.classList.add('playing');
-        }).catch(() => {});
-      }
-      document.removeEventListener('touchstart', initAudio);
-    }, { once: true });
+    // 选择按钮事件
+    document.getElementById('btnYes').addEventListener('click', chooseYes);
+    document.getElementById('btnNo').addEventListener('click', chooseNo);
+
+    // 音乐按钮
+    musicControl.addEventListener('click', toggleMusic);
 
     // 初始化
     createStars();
     createProgressDots();
-    initImageLoading();
+    preloadAllImages();
     goToPage(0);
+
+    // 页面加载完成后尝试自动播放
+    window.addEventListener('load', () => {
+      // 延迟一点确保音频已加载
+      setTimeout(() => {
+        if (!musicInitialized) {
+          musicInitialized = true;
+          bgMusic.load();
+          playMusic();
+        }
+      }, 100);
+    });
+
+    // 尝试自动播放（捕获所有用户交互）
+    ['touchstart', 'touchend', 'click'].forEach(event => {
+      document.addEventListener(event, function initMusic() {
+        if (!musicInitialized) {
+          musicInitialized = true;
+          bgMusic.load();
+          playMusic();
+        }
+        document.removeEventListener(event, initMusic);
+      }, { once: true, passive: true });
+    });
   </script>
 </body>
 </html>
