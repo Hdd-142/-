@@ -33,6 +33,7 @@
       height: 100%;
     }
 
+    /* 星星背景 - 减少数量优化性能 */
     .stars {
       position: fixed;
       top: 0;
@@ -85,6 +86,7 @@
       padding: 20px;
       padding-top: 70px;
       padding-bottom: 60px;
+      -webkit-overflow-scrolling: touch;
     }
 
     .progress-dots {
@@ -331,7 +333,7 @@
 <body>
   <!-- 预加载音频 -->
   <audio id="bgMusic" preload="auto" loop>
-    <source src="https://cdn.jsdelivr.net/gh/Hdd-142/-@main/video/%E8%83%8C%E6%99%AF%E9%9F%B3%E4%B9%90.m4a" type="audio/mp4">
+    <source src="video/背景音乐.m4a" type="audio/mp4">
   </audio>
 
   <div class="music-control" id="musicControl">
@@ -345,42 +347,42 @@
     <div class="pages" id="pages">
       <div class="page" data-page="0">
         <div class="content">
-          <div class="dog-image"><img src="https://cdn.jsdelivr.net/gh/Hdd-142/-@main/image/%E6%9D%A5%E4%BA%86.gif" alt="小狗"></div>
+          <div class="dog-image"><img src="image/来了.gif" alt="小狗"></div>
           <p class="main-text">瑶瑶，欢迎回家呀</p>
         </div>
       </div>
 
       <div class="page" data-page="1">
         <div class="content">
-          <div class="dog-image"><img src="https://cdn.jsdelivr.net/gh/Hdd-142/-@main/image/%E6%B1%AA%E6%B1%AA.gif" alt="小狗"></div>
+          <div class="dog-image"><img src="image/汪汪.gif" alt="小狗"></div>
           <p class="main-text">今天也认认真真忙了一整天对不对</p>
         </div>
       </div>
 
       <div class="page" data-page="2">
         <div class="content">
-          <div class="dog-image"><img src="https://cdn.jsdelivr.net/gh/Hdd-142/-@main/image/%E5%87%8C%E4%B9%B1.gif" alt="小狗"></div>
+          <div class="dog-image"><img src="image/凌乱.gif" alt="小狗"></div>
           <p class="main-text">是不是累得都蔫蔫啦</p>
         </div>
       </div>
 
       <div class="page" data-page="3">
         <div class="content">
-          <div class="dog-image"><img src="https://cdn.jsdelivr.net/gh/Hdd-142/-@main/image/%E8%BD%AC%E5%9C%88%E5%9C%88.gif" alt="小狗"></div>
+          <div class="dog-image"><img src="image/转圈圈.gif" alt="小狗"></div>
           <p class="main-text">来跟着小狗慢慢舒展一下身体吧</p>
         </div>
       </div>
 
       <div class="page" data-page="4">
         <div class="content">
-          <div class="dog-image"><img src="https://cdn.jsdelivr.net/gh/Hdd-142/-@main/image/%E6%9C%9F%E5%BE%85.gif" alt="小狗"></div>
+          <div class="dog-image"><img src="image/期待.gif" alt="小狗"></div>
           <p class="main-text">先松一松僵掉的肩颈，好不好</p>
         </div>
       </div>
 
       <div class="page" data-page="5">
         <div class="content">
-          <div class="dog-image"><img src="https://cdn.jsdelivr.net/gh/Hdd-142/-@main/image/%E9%94%BB%E7%82%BC.gif" alt="小狗"></div>
+          <div class="dog-image"><img src="image/锻炼.gif" alt="小狗"></div>
           <p class="main-text">小狗亲自试过，</p>
           <p class="sub-text">真的很有效的哦</p>
         </div>
@@ -395,14 +397,14 @@
 
       <div class="page" data-page="7">
         <div class="content">
-          <div class="dog-image"><img src="https://cdn.jsdelivr.net/gh/Hdd-142/-@main/image/%E5%98%BF%E5%98%BF.gif" alt="小狗"></div>
+          <div class="dog-image"><img src="image/嘿嘿.gif" alt="小狗"></div>
           <p class="main-text">瑶瑶超棒的～肩膀是不是松快一点啦</p>
         </div>
       </div>
 
       <div class="page" data-page="8">
         <div class="content">
-          <div class="dog-image"><img src="https://cdn.jsdelivr.net/gh/Hdd-142/-@main/image/%E5%95%A6%E5%95%A6%E5%95%A6.gif" alt="小狗"></div>
+          <div class="dog-image"><img src="image/啦啦啦.gif" alt="小狗"></div>
           <p class="main-text">接着来拉一拉坐酸了的腰吧</p>
         </div>
       </div>
@@ -416,14 +418,14 @@
 
       <div class="page" data-page="10">
         <div class="content">
-          <div class="dog-image"><img src="https://cdn.jsdelivr.net/gh/Hdd-142/-@main/image/%E9%80%81%E4%BD%A0%E8%8A%B1%E8%8A%B1.gif" alt="小狗"></div>
+          <div class="dog-image"><img src="image/送你花花.gif" alt="小狗"></div>
           <p class="main-text">太厉害啦～腰是不是舒服多啦</p>
         </div>
       </div>
 
       <div class="page" data-page="11">
         <div class="content">
-          <div class="dog-image"><img src="https://cdn.jsdelivr.net/gh/Hdd-142/-@main/image/%E6%9C%89%E6%88%91%E5%91%A2.gif" alt="小狗"></div>
+          <div class="dog-image"><img src="image/有我呢.gif" alt="小狗"></div>
           <p class="main-text">对啦～</p>
           <p class="text-line">要是胸口有点胀胀的不舒服</p>
           <p class="small-text">小狗有几个温柔的小办法哦</p>
@@ -434,8 +436,8 @@
         <div class="content">
           <p class="text-line">第一个小办法 · 冷热交替敷</p>
           <div class="heat-cold-container">
-            <div class="heat-item"><img src="https://cdn.jsdelivr.net/gh/Hdd-142/-@main/image/%E7%83%AD%E6%B0%B4%E8%B4%9F.png" alt="热水袋"><span class="heat-label">3分钟</span></div>
-            <div class="heat-item"><img src="https://cdn.jsdelivr.net/gh/Hdd-142/-@main/image/%E6%AF%9B%E5%B7%BE.png" alt="毛巾"><span class="heat-label">1分钟</span></div>
+            <div class="heat-item"><img src="image/热水袋.png" alt="热水袋"><span class="heat-label">3分钟</span></div>
+            <div class="heat-item"><img src="image/毛巾.png" alt="毛巾"><span class="heat-label">1分钟</span></div>
           </div>
           <p class="text-line">暖水袋温敷3分钟，冷水湿毛巾敷1分钟</p>
           <p class="text-line small">重复3轮，胀胀的感觉会轻很多哦</p>
@@ -444,7 +446,7 @@
 
       <div class="page" data-page="13">
         <div class="content">
-          <div class="dog-image"><img src="https://cdn.jsdelivr.net/gh/Hdd-142/-@main/image/%E5%90%83%E9%A5%AD%E9%A5%AD.gif" alt="小狗"></div>
+          <div class="dog-image"><img src="image/吃饭饭.gif" alt="小狗"></div>
           <p class="text-line">少喝奶茶、可乐、浓茶哦</p>
           <p class="text-line">吃清淡少盐，胀感会悄悄减轻</p>
           <p class="text-line">平时吃点坚果，香蕉也有帮助呀</p>
@@ -455,7 +457,7 @@
       <div class="page" data-page="14">
         <div class="content">
           <p class="main-text">还有一个小提醒呀</p>
-          <img class="gel-image" src="https://cdn.jsdelivr.net/gh/Hdd-142/-@main/image/%E5%B8%83%E6%B4%81%E8%90%A5%E5%90%88%E8%82%A0%E5%87%9D%E8%83%B6.png" alt="凝胶">
+          <img class="gel-image" src="image/布洛芬凝胶.png" alt="凝胶">
           <p class="text-line">要是胀感实在明显</p>
           <p class="text-line">可以问问医生能不能用外用凝胶</p>
           <p class="text-line small">一定要听医生的话使用哦</p>
@@ -464,7 +466,7 @@
 
       <div class="page" data-page="15">
         <div class="content">
-          <div class="dog-image"><img src="https://cdn.jsdelivr.net/gh/Hdd-142/-@main/image/%E6%92%92%E8%8A%B1%E8%8A%B1.gif" alt="小狗"></div>
+          <div class="dog-image"><img src="image/撒花花.gif" alt="小狗"></div>
           <p class="main-text">瑶瑶超厉害！全部都完成啦～</p>
           <p class="sub-text">今天也辛苦啦，好好歇一歇吧</p>
         </div>
@@ -472,7 +474,7 @@
 
       <div class="page" data-page="16">
         <div class="content">
-          <div class="dog-image"><img src="https://cdn.jsdelivr.net/gh/Hdd-142/-@main/image/%E5%96%9C%E6%AC%A2.gif" alt="小狗"></div>
+          <div class="dog-image"><img src="image/喜欢.gif" alt="小狗"></div>
           <p class="main-text">现在有没有舒服一点呀？</p>
           <p class="sub-text">瑶瑶开心的话，小狗也会跟着开心哦</p>
         </div>
@@ -480,7 +482,7 @@
 
       <div class="page" data-page="17">
         <div class="content">
-          <div class="dog-image"><img src="https://cdn.jsdelivr.net/gh/Hdd-142/-@main/image/%E5%AD%A6%E4%B9%A0.gif" alt="小狗"></div>
+          <div class="dog-image"><img src="image/学习.gif" alt="小狗"></div>
           <p class="main-text">这是小狗学Ai顺便做的呢</p>
           <p class="sub-text">小狗是不是很厉害</p>
         </div>
@@ -488,7 +490,7 @@
 
       <div class="page" data-page="18">
         <div class="content">
-          <div class="dog-image"><img src="https://cdn.jsdelivr.net/gh/Hdd-142/-@main/image/%E5%AE%8C%E6%88%90.gif" alt="小狗"></div>
+          <div class="dog-image"><img src="image/完成.gif" alt="小狗"></div>
           <p class="main-text">小狗一边学一边做</p>
           <p class="sub-text">掌握了不少东西呢！</p>
         </div>
@@ -496,7 +498,7 @@
 
       <div class="page" data-page="19">
         <div class="content">
-          <div class="dog-image"><img src="https://cdn.jsdelivr.net/gh/Hdd-142/-@main/image/%E4%BE%9D%E5%81%87.gif" alt="小狗"></div>
+          <div class="dog-image"><img src="image/依偎.gif" alt="小狗"></div>
           <p class="main-text">小狗知道瑶瑶在乎小狗</p>
           <p class="sub-text">所以为小狗想了很多很多</p>
         </div>
@@ -504,7 +506,7 @@
 
       <div class="page" data-page="20">
         <div class="content">
-          <div class="dog-image"><img src="https://cdn.jsdelivr.net/gh/Hdd-142/-@main/image/%E5%BF%AB%E4%B9%90.gif" alt="小狗"></div>
+          <div class="dog-image"><img src="image/快乐.gif" alt="小狗"></div>
           <p class="main-text">你看，小狗心里挂念着瑶瑶</p>
           <p class="sub-text">小狗会学得更用心，更踏实呢！</p>
         </div>
@@ -512,7 +514,7 @@
 
       <div class="page" data-page="21">
         <div class="content">
-          <div class="dog-image"><img src="https://cdn.jsdelivr.net/gh/Hdd-142/-@main/image/%E6%9B%B4%E5%A5%BD%E6%9B%B4%E5%A5%BD.gif" alt="小狗"></div>
+          <div class="dog-image"><img src="image/更好更好.gif" alt="小狗"></div>
           <p class="main-text">所以小狗相信，我们拥有彼此</p>
           <p class="sub-text">未来一定会更好更好的呢！</p>
         </div>
@@ -527,7 +529,7 @@
       <div class="page" data-page="23" id="choicePage">
         <div class="content">
           <div class="dog-image">
-            <img id="choiceDogImg" src="https://cdn.jsdelivr.net/gh/Hdd-142/-@main/image/%E5%93%AD%E5%95%95%E5%95%95.gif" alt="小狗">
+            <img id="choiceDogImg" src="image/哭唧唧.gif" alt="小狗">
           </div>
           <p id="choiceMainText" class="sub-text" style="font-size: 26px; font-weight: bold; color: #5D4E37;">不要再赶小狗走了</p>
           <p id="choiceQuestion" class="main-text" style="font-size: 40px; margin-top: 15px; opacity: 0;">好不好</p>
@@ -554,7 +556,6 @@
     let choiceMade = false;
     let noClickCount = 0;
 
-    const CDN = 'https://cdn.jsdelivr.net/gh/Hdd-142/-@main';
     const bgMusic = document.getElementById('bgMusic');
     const musicControl = document.getElementById('musicControl');
     const musicIcon = document.getElementById('musicIcon');
@@ -567,26 +568,22 @@
     const shoulderVideo = document.getElementById('shoulderVideo');
     const waistVideo = document.getElementById('waistVideo');
 
-    // 图片预加载列表
+    // 图片预加载
     const imageList = [
-      '%E6%9D%A5%E4%BA%86.gif', '%E6%B1%AA%E6%B1%AA.gif', '%E5%87%8C%E4%B9%B1.gif', '%E8%BD%AC%E5%9C%88%E5%9C%88.gif', '%E6%9C%9F%E5%BE%85.gif',
-      '%E9%94%BB%E7%82%BC.gif', '%E5%98%BF%E5%98%BF.gif', '%E5%95%A6%E5%95%A6%E5%95%A6.gif', '%E9%80%81%E4%BD%A0%E8%8A%B1%E8%8A%B1.gif', '%E6%9C%89%E6%88%91%E5%91%A2.gif',
-      '%E5%90%83%E9%A5%AD%E9%A5%AD.gif', '%E6%92%92%E8%8A%B1%E8%8A%B1.gif', '%E5%96%9C%E6%AC%A2.gif', '%E5%AD%A6%E4%B9%A0.gif', '%E5%AE%8C%E6%88%90.gif',
-      '%E4%BE%9D%E5%81%87.gif', '%E5%BF%AB%E4%B9%90.gif', '%E6%9B%B4%E5%A5%BD%E6%9B%B4%E5%A5%BD.gif', '%E5%93%AD%E5%95%95%E5%95%95.gif', '%E5%93%8E%E5%93%8E%E5%93%8E.gif',
-      '%E5%91%80%E5%91%BC.gif', '%E6%8B%89%E8%8E%8B%E8%8E%8B.gif'
+      'image/来了.gif', 'image/汪汪.gif', 'image/凌乱.gif', 'image/转圈圈.gif', 'image/期待.gif',
+      'image/锻炼.gif', 'image/嘿嘿.gif', 'image/啦啦啦.gif', 'image/送你花花.gif', 'image/有我呢.gif',
+      'image/吃饭饭.gif', 'image/撒花花.gif', 'image/喜欢.gif', 'image/学习.gif', 'image/完成.gif',
+      'image/依偎.gif', 'image/快乐.gif', 'image/更好更好.gif', 'image/哭唧唧.gif', 'image/呜呜呜.gif',
+      'image/呀呼.gif', 'image/拉粑粑.gif'
     ];
 
     const preloadedImages = new Set();
 
-    function getImgUrl(name) {
-      return CDN + '/image/' + name;
-    }
-
-    function preloadImage(name) {
-      if (preloadedImages.has(name)) return;
-      preloadedImages.add(name);
+    function preloadImage(src) {
+      if (preloadedImages.has(src)) return;
+      preloadedImages.add(src);
       const img = new Image();
-      img.src = getImgUrl(name);
+      img.src = src;
     }
 
     function preloadNearbyImages(index) {
@@ -594,8 +591,9 @@
       indices.forEach(i => preloadImage(imageList[i]));
     }
 
+    // 预加载所有图片
     function preloadAllImages() {
-      imageList.forEach(name => preloadImage(name));
+      imageList.forEach(src => preloadImage(src));
     }
 
     // 播放音乐
@@ -616,6 +614,7 @@
       if (!musicInitialized) {
         musicInitialized = true;
       }
+
       if (bgMusic.paused) {
         playMusic();
       } else {
@@ -631,6 +630,7 @@
       const starsContainer = document.getElementById('stars');
       starsContainer.innerHTML = '';
       const starCount = window.innerWidth < 400 ? 10 : 15;
+
       for (let i = 0; i < starCount; i++) {
         const star = document.createElement('div');
         star.className = 'star';
@@ -659,10 +659,11 @@
     function goToPage(index) {
       if (index < 0 || index >= TOTAL_PAGES) return;
 
+      // 重置选择页状态
       if (index !== 23) {
         choiceMade = false;
         noClickCount = 0;
-        document.getElementById('choiceDogImg').src = getImgUrl('%E5%93%AD%E5%95%95%E5%95%95.gif');
+        document.getElementById('choiceDogImg').src = 'image/哭唧唧.gif';
         document.getElementById('choiceMainText').style.display = 'block';
         document.getElementById('choiceMainText').textContent = '不要再赶小狗走了';
         document.getElementById('choiceQuestion').style.display = 'block';
@@ -674,6 +675,7 @@
         document.getElementById('btnNo').classList.remove('disabled', 'hidden');
       }
 
+      // 离开视频页
       if (currentPage === 6) shoulderVideo.src = '';
       if (currentPage === 9) waistVideo.src = '';
 
@@ -686,6 +688,7 @@
 
       touchHint.textContent = currentPage === TOTAL_PAGES - 1 ? '请做出选择' : '点击任意处继续';
 
+      // 进入视频页
       if (currentPage === 6) {
         shoulderVideo.src = SHOULDER_VIDEO_URL;
         if (musicPlaying) bgMusic.pause();
@@ -696,8 +699,10 @@
         bgMusic.play().catch(() => {});
       }
 
+      // 预加载相邻图片
       preloadNearbyImages(currentPage);
 
+      // 进入选择页
       if (currentPage === 23) {
         setTimeout(initChoicePage, 300);
       }
@@ -711,10 +716,12 @@
       if (currentPage > 0) goToPage(currentPage - 1);
     }
 
+    // 选择「好」
     function chooseYes() {
       if (choiceMade) return;
       choiceMade = true;
-      document.getElementById('choiceDogImg').src = getImgUrl('%E5%91%80%E5%91%BC.gif');
+
+      document.getElementById('choiceDogImg').src = 'image/呀呼.gif';
       document.getElementById('choiceButtons').classList.remove('show');
       document.getElementById('choiceButtons').style.display = 'none';
       document.getElementById('choiceQuestion').style.display = 'none';
@@ -730,36 +737,44 @@
       }, 2000);
     }
 
+    // 选择「不好」
     function chooseNo() {
       noClickCount++;
+
       if (noClickCount === 1) {
-        document.getElementById('choiceDogImg').src = getImgUrl('%E5%93%8E%E5%93%8E%E5%93%8E.gif');
+        document.getElementById('choiceDogImg').src = 'image/呜呜呜.gif';
         document.getElementById('choiceMainText').textContent = '呜……不行的呀，小狗已经赖上瑶瑶了';
         document.getElementById('btnNo').classList.add('disabled');
         document.getElementById('choiceHint').style.display = 'block';
         document.getElementById('choiceHint').textContent = '就选好嘛～';
       } else if (noClickCount >= 2) {
-        document.getElementById('choiceDogImg').src = getImgUrl('%E6%8B%89%E8%8E%8B%E8%8E%8B.gif');
+        document.getElementById('choiceDogImg').src = 'image/拉粑粑.gif';
         document.getElementById('choiceMainText').textContent = '哼，请坏瑶瑶吃大便！！';
         document.getElementById('btnNo').classList.add('hidden');
         document.getElementById('choiceHint').style.display = 'none';
       }
     }
 
+    // 初始化选择页
     function initChoicePage() {
       const question = document.getElementById('choiceQuestion');
       const buttons = document.getElementById('choiceButtons');
+
       setTimeout(() => {
         question.style.opacity = '1';
       }, 300);
+
       setTimeout(() => {
         buttons.classList.add('show');
       }, 800);
     }
 
+    // 事件监听
     document.addEventListener('touchstart', e => {
       touchStartX = e.touches[0].clientX;
       touchStartY = e.touches[0].clientY;
+
+      // 首次触摸时尝试播放音乐
       if (!musicInitialized) {
         musicInitialized = true;
         bgMusic.load();
@@ -770,11 +785,14 @@
     document.addEventListener('touchend', e => {
       const deltaX = e.changedTouches[0].clientX - touchStartX;
       const deltaY = e.changedTouches[0].clientY - touchStartY;
+
+      // 水平滑动大于垂直滑动才翻页
       if (Math.abs(deltaX) > 30 && Math.abs(deltaX) > Math.abs(deltaY)) {
         deltaX < 0 ? nextPage() : prevPage();
       }
     }, { passive: true });
 
+    // 点击事件
     document.querySelector('.app').addEventListener('click', e => {
       if (e.target.closest('.choice-btn')) return;
       if (e.target.tagName === 'IFRAME') return;
@@ -782,16 +800,22 @@
       nextPage();
     });
 
+    // 选择按钮事件
     document.getElementById('btnYes').addEventListener('click', chooseYes);
     document.getElementById('btnNo').addEventListener('click', chooseNo);
+
+    // 音乐按钮
     musicControl.addEventListener('click', toggleMusic);
 
+    // 初始化
     createStars();
     createProgressDots();
     preloadAllImages();
     goToPage(0);
 
+    // 页面加载完成后尝试自动播放
     window.addEventListener('load', () => {
+      // 延迟一点确保音频已加载
       setTimeout(() => {
         if (!musicInitialized) {
           musicInitialized = true;
@@ -801,6 +825,7 @@
       }, 100);
     });
 
+    // 尝试自动播放（捕获所有用户交互）
     ['touchstart', 'touchend', 'click'].forEach(event => {
       document.addEventListener(event, function initMusic() {
         if (!musicInitialized) {
