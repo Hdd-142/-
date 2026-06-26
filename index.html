@@ -137,6 +137,14 @@
       padding: 0 20px;
     }
 
+    .small-text {
+      font-size: 14px;
+      color: #A0937D;
+      margin-top: 8px;
+      padding: 0 20px;
+      line-height: 1.5;
+    }
+
     .touch-hint {
       position: fixed;
       bottom: 40px;
@@ -224,6 +232,55 @@
     @keyframes rotate {
       from { transform: rotate(0deg); }
       to { transform: rotate(360deg); }
+    }
+
+    /* 冷热敷图片组合 */
+    .heat-cold-container {
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 30px;
+    }
+
+    .heat-item {
+      position: relative;
+    }
+
+    .heat-item img {
+      width: 120px;
+      height: auto;
+    }
+
+    .heat-label {
+      position: absolute;
+      bottom: -25px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 14px;
+      color: #8B7355;
+      white-space: nowrap;
+    }
+
+    /* 凝胶图片 */
+    .gel-image {
+      width: 200px;
+      height: auto;
+      margin-bottom: 30px;
+    }
+
+    /* 多行文字样式 */
+    .text-line {
+      font-size: 18px;
+      color: #8B7355;
+      margin-top: 12px;
+      padding: 0 20px;
+      line-height: 1.6;
+    }
+
+    .text-line.small {
+      font-size: 14px;
+      color: #A0937D;
     }
   </style>
 </head>
@@ -368,32 +425,105 @@
           <p class="main-text">太厉害啦～腰是不是舒服多啦</p>
         </div>
       </div>
+
+      <!-- 第12页 - 胸部舒缓预告 -->
+      <div class="page" data-page="11">
+        <div class="content">
+          <div class="dog-image">
+            <img src="image/有我呢.gif" alt="小狗">
+          </div>
+          <p class="main-text">对啦～</p>
+          <p class="text-line">要是胸口有点胀胀的不舒服</p>
+          <p class="small-text">小狗有几个温柔的小办法哦</p>
+        </div>
+      </div>
+
+      <!-- 第13页 - 舒缓方法一：冷热交替敷 -->
+      <div class="page" data-page="12">
+        <div class="content">
+          <p class="text-line">第一个小办法 · 冷热交替敷</p>
+          <div class="heat-cold-container">
+            <div class="heat-item">
+              <img src="image/热水袋.png" alt="热水袋">
+              <span class="heat-label">3分钟</span>
+            </div>
+            <div class="heat-item">
+              <img src="image/毛巾.png" alt="毛巾">
+              <span class="heat-label">1分钟</span>
+            </div>
+          </div>
+          <p class="text-line">暖水袋温敷3分钟，冷水湿毛巾敷1分钟</p>
+          <p class="text-line small">重复3轮，胀胀的感觉会轻很多哦</p>
+        </div>
+      </div>
+
+      <!-- 第14页 - 舒缓方法二：饮食轻轻调理 -->
+      <div class="page" data-page="13">
+        <div class="content">
+          <div class="dog-image">
+            <img src="image/吃饭饭.gif" alt="小狗">
+          </div>
+          <p class="text-line">少喝奶茶、可乐、浓茶哦</p>
+          <p class="text-line">吃清淡少盐，胀感会悄悄减轻</p>
+          <p class="text-line">平时吃点坚果，香蕉也有帮助呀</p>
+          <p class="small-text">（瑶瑶不爱吃就算了）</p>
+        </div>
+      </div>
+
+      <!-- 第15页 - 舒缓提醒：外用凝胶建议 -->
+      <div class="page" data-page="14">
+        <div class="content">
+          <p class="main-text">还有一个小提醒呀</p>
+          <img class="gel-image" src="image/布洛芬凝胶.png" alt="凝胶">
+          <p class="text-line">要是胀感实在明显</p>
+          <p class="text-line">可以问问医生能不能用外用凝胶</p>
+          <p class="text-line small">一定要听医生的话使用哦</p>
+        </div>
+      </div>
+
+      <!-- 第16页 - 全部完成总结 -->
+      <div class="page" data-page="15">
+        <div class="content">
+          <div class="dog-image">
+            <img src="image/撒花花.gif" alt="小狗">
+          </div>
+          <p class="main-text">瑶瑶超厉害！全部都完成啦～</p>
+          <p class="sub-text">今天也辛苦啦，好好歇一歇吧</p>
+        </div>
+      </div>
+
+      <!-- 第17页 - 收尾陪伴页 -->
+      <div class="page" data-page="16">
+        <div class="content">
+          <div class="dog-image">
+            <img src="image/喜欢.gif" alt="小狗">
+          </div>
+          <p class="main-text">现在有没有舒服一点呀？</p>
+          <p class="sub-text">瑶瑶开心的话，小狗也会跟着开心哦</p>
+        </div>
+      </div>
     </div>
 
     <p class="touch-hint" id="touchHint">点击任意处继续</p>
   </div>
 
   <script>
-    const TOTAL_PAGES = 11;
+    const TOTAL_PAGES = 17;
     let currentPage = 0;
     let touchStartX = 0;
-    let musicPlaying = true; // 默认开启音乐
+    let musicPlaying = true;
     let videoPlaying = false;
 
-    // 背景音乐
     const bgMusic = document.getElementById('bgMusic');
     const musicControl = document.getElementById('musicControl');
     const musicIcon = document.getElementById('musicIcon');
 
-    // 视频URL（带自动播放）
     const SHOULDER_VIDEO_URL = 'https://player.bilibili.com/player.html?bvid=BV1vu411e7fC&page=1&autoplay=1';
     const WAIST_VIDEO_URL = 'https://player.bilibili.com/player.html?bvid=BV1pV4y1C7eu&page=1&autoplay=1';
 
-    // 获取视频元素
     const shoulderVideo = document.getElementById('shoulderVideo');
     const waistVideo = document.getElementById('waistVideo');
 
-    // 切换音乐播放
     function toggleMusic() {
       if (musicPlaying) {
         bgMusic.pause();
@@ -407,7 +537,6 @@
       musicPlaying = !musicPlaying;
     }
 
-    // 生成星星
     function createStars() {
       const starsContainer = document.getElementById('stars');
       const starCount = Math.floor(Math.random() * 6) + 15;
@@ -425,7 +554,6 @@
       }
     }
 
-    // 生成进度点
     function createProgressDots() {
       const container = document.getElementById('progressDots');
       container.innerHTML = '';
@@ -437,28 +565,14 @@
       }
     }
 
-    // 检查是否有视频正在播放（通过检测iframe是否有内容）
-    function checkVideoPlaying() {
-      const shoulderHasSrc = shoulderVideo.src && shoulderVideo.src !== '';
-      const waistHasSrc = waistVideo.src && waistVideo.src !== '';
-      return (shoulderHasSrc && currentPage === 6) || (waistHasSrc && currentPage === 9);
-    }
-
-    // 跳转到指定页面
     function goToPage(index) {
       if (index < 0 || index >= TOTAL_PAGES) return;
 
-      // 离开页面时
       if (currentPage === 6) {
         shoulderVideo.src = '';
       }
       if (currentPage === 9) {
         waistVideo.src = '';
-      }
-
-      // 如果离开视频页，暂停背景音乐一会儿再恢复
-      if ((currentPage === 6 || currentPage === 9) && !videoPlaying) {
-        bgMusic.pause();
       }
 
       currentPage = index;
@@ -478,18 +592,16 @@
 
       document.querySelectorAll('.page')[currentPage].classList.add('page-enter');
 
-      // 进入视频页时
       if (currentPage === 6) {
         shoulderVideo.src = SHOULDER_VIDEO_URL;
         videoPlaying = true;
-        bgMusic.pause(); // 视频播放时暂停背景音乐
+        bgMusic.pause();
       } else if (currentPage === 9) {
         waistVideo.src = WAIST_VIDEO_URL;
         videoPlaying = true;
-        bgMusic.pause(); // 视频播放时暂停背景音乐
+        bgMusic.pause();
       } else {
         videoPlaying = false;
-        // 非视频页面恢复背景音乐
         if (musicPlaying) {
           bgMusic.play().catch(e => console.log('播放失败:', e));
         }
@@ -526,22 +638,18 @@
     }, { passive: true });
 
     document.querySelector('.app').addEventListener('click', (e) => {
-      // 如果点击的是iframe视频区域或音乐按钮，不处理
       if (e.target.tagName === 'IFRAME' || e.target.closest('.music-control')) {
         return;
       }
       nextPage();
     });
 
-    // 页面加载完成后自动播放音乐
     document.addEventListener('DOMContentLoaded', () => {
       bgMusic.play().then(() => {
         musicPlaying = true;
         musicIcon.textContent = '♫';
         musicControl.classList.add('playing');
       }).catch(e => {
-        // 自动播放被阻止，等待用户交互
-        console.log('等待用户交互后播放音乐');
         document.addEventListener('touchstart', function initMusic() {
           bgMusic.play().then(() => {
             musicPlaying = true;
@@ -553,7 +661,6 @@
       });
     });
 
-    // 初始化
     createStars();
     createProgressDots();
     goToPage(0);
