@@ -154,17 +154,19 @@
       50% { opacity: 1; }
     }
 
-    .video-container {
+    .video-wrapper {
       width: 100%;
       max-width: 400px;
       margin-bottom: 20px;
+      background: #FFF8DC;
     }
 
-    .video-container iframe {
+    .video-wrapper iframe {
       width: 100%;
       height: 225px;
       border-radius: 12px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+      border: none;
+      display: block;
     }
 
     .video-label {
@@ -260,14 +262,14 @@
       <!-- 第7页 - 肩颈视频 -->
       <div class="page" data-page="6">
         <div class="content">
-          <div class="video-container" id="shoulderVideoContainer">
+          <div class="video-wrapper">
             <iframe
-              id="shoulderIframe"
-              src=""
+              id="shoulderVideo"
+              src="https://player.bilibili.com/player.html?bvid=BV1vu411e7fC&page=1&autoplay=0"
               scrolling="no"
+              allowfullscreen="true"
               frameborder="0"
-              allowfullscreen="true">
-            </iframe>
+            ></iframe>
           </div>
           <p class="video-label">肩颈舒缓</p>
         </div>
@@ -296,14 +298,14 @@
       <!-- 第10页 - 腰部视频 -->
       <div class="page" data-page="9">
         <div class="content">
-          <div class="video-container" id="waistVideoContainer">
+          <div class="video-wrapper">
             <iframe
-              id="waistIframe"
-              src=""
+              id="waistVideo"
+              src="https://player.bilibili.com/player.html?bvid=BV1pV4y1C7eu&page=1&autoplay=0"
               scrolling="no"
+              allowfullscreen="true"
               frameborder="0"
-              allowfullscreen="true">
-            </iframe>
+            ></iframe>
           </div>
           <p class="video-label">腰部舒缓</p>
         </div>
@@ -327,18 +329,6 @@
     const TOTAL_PAGES = 11;
     let currentPage = 0;
     let touchStartX = 0;
-
-    // 本地存储键名
-    const STORAGE_KEYS = {
-      shoulderVideo: 'relaxDog_shoulderVideoTime',
-      waistVideo: 'relaxDog_waistVideoTime'
-    };
-
-    // B站视频ID
-    const VIDEO_IDS = {
-      shoulder: 'BV1vu411e7fC',
-      waist: 'BV1pV4y1C7eu'
-    };
 
     // 生成星星
     function createStars() {
@@ -370,55 +360,9 @@
       }
     }
 
-    // 保存视频进度
-    function saveVideoProgress() {
-      const shoulderIframe = document.getElementById('shoulderIframe');
-      const waistIframe = document.getElementById('waistIframe');
-
-      // 尝试从iframe获取播放进度
-      try {
-        // 由于跨域限制，直接使用当前URL参数中的时间
-        const shoulderSrc = shoulderIframe.src;
-        const waistSrc = waistIframe.src;
-
-        // 保存当前播放URL（包含时间参数）
-        localStorage.setItem(STORAGE_KEYS.shoulderVideo, shoulderSrc);
-        localStorage.setItem(STORAGE_KEYS.waistVideo, waistSrc);
-      } catch (e) {
-        console.log('无法保存视频进度:', e);
-      }
-    }
-
-    // 加载视频进度
-    function loadVideoProgress(iframe, storageKey) {
-      const savedSrc = localStorage.getItem(storageKey);
-      if (savedSrc) {
-        iframe.src = savedSrc;
-      } else {
-        // 默认播放地址（不自动播放）
-        const videoId = storageKey === STORAGE_KEYS.shoulderVideo ? VIDEO_IDS.shoulder : VIDEO_IDS.waist;
-        iframe.src = `https://player.bilibili.com/player.html?bvid=${videoId}&page=1&autoplay=0`;
-      }
-    }
-
     // 跳转到指定页面
     function goToPage(index) {
       if (index < 0 || index >= TOTAL_PAGES) return;
-
-      // 如果从视频页离开，保存进度
-      if (currentPage === 6 || currentPage === 9) {
-        saveVideoProgress();
-      }
-
-      // 关闭当前视频（如果是视频页）
-      if (index !== 6) {
-        const shoulderIframe = document.getElementById('shoulderIframe');
-        shoulderIframe.src = '';
-      }
-      if (index !== 9) {
-        const waistIframe = document.getElementById('waistIframe');
-        waistIframe.src = '';
-      }
 
       currentPage = index;
       const pages = document.getElementById('pages');
@@ -436,13 +380,6 @@
       }
 
       document.querySelectorAll('.page')[currentPage].classList.add('page-enter');
-
-      // 进入视频页时恢复播放进度
-      if (currentPage === 6) {
-        loadVideoProgress(document.getElementById('shoulderIframe'), STORAGE_KEYS.shoulderVideo);
-      } else if (currentPage === 9) {
-        loadVideoProgress(document.getElementById('waistIframe'), STORAGE_KEYS.waistVideo);
-      }
     }
 
     function nextPage() {
@@ -475,7 +412,8 @@
     }, { passive: true });
 
     document.querySelector('.app').addEventListener('click', (e) => {
-      if (e.target.closest('.video-container')) {
+      // 如果点击的是iframe视频区域，不处理
+      if (e.target.tagName === 'IFRAME') {
         return;
       }
       nextPage();
