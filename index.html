@@ -377,7 +377,7 @@
     const TOTAL_PAGES = 11;
     let currentPage = 0;
     let touchStartX = 0;
-    let musicPlaying = false;
+    let musicPlaying = true; // 默认开启音乐
     let videoPlaying = false;
 
     // 背景音乐
@@ -533,19 +533,24 @@
       nextPage();
     });
 
-    // 页面加载完成后尝试播放音乐
+    // 页面加载完成后自动播放音乐
     document.addEventListener('DOMContentLoaded', () => {
-      // 用户首次交互后自动播放音乐
-      document.addEventListener('touchstart', function initMusic() {
-        if (!musicPlaying) {
+      bgMusic.play().then(() => {
+        musicPlaying = true;
+        musicIcon.textContent = '♫';
+        musicControl.classList.add('playing');
+      }).catch(e => {
+        // 自动播放被阻止，等待用户交互
+        console.log('等待用户交互后播放音乐');
+        document.addEventListener('touchstart', function initMusic() {
           bgMusic.play().then(() => {
             musicPlaying = true;
             musicIcon.textContent = '♫';
             musicControl.classList.add('playing');
-          }).catch(e => console.log('自动播放被阻止:', e));
-        }
-        document.removeEventListener('touchstart', initMusic);
-      }, { once: true });
+          }).catch(err => console.log('播放失败:', err));
+          document.removeEventListener('touchstart', initMusic);
+        }, { once: true });
+      });
     });
 
     // 初始化
