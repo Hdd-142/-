@@ -190,9 +190,54 @@
         transform: translateY(0);
       }
     }
+
+    /* 音乐控制按钮 */
+    .music-control {
+      position: fixed;
+      top: 30px;
+      right: 20px;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(93, 78, 55, 0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 200;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .music-control:active {
+      transform: scale(0.9);
+    }
+
+    .music-icon {
+      font-size: 20px;
+      color: #fff;
+    }
+
+    .music-control.playing .music-icon {
+      animation: rotate 3s linear infinite;
+    }
+
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
   </style>
 </head>
 <body>
+  <!-- 背景音乐 -->
+  <audio id="bgMusic" loop>
+    <source src="video/背景音乐.m4a" type="audio/mp4">
+  </audio>
+
+  <!-- 音乐控制按钮 -->
+  <div class="music-control" id="musicControl" onclick="toggleMusic()">
+    <span class="music-icon" id="musicIcon">♪</span>
+  </div>
+
   <div class="stars" id="stars"></div>
 
   <div class="app">
@@ -270,6 +315,7 @@
               scrolling="no"
               allowfullscreen="true"
               frameborder="0"
+              allow="autoplay; fullscreen"
             ></iframe>
           </div>
           <p class="video-label">肩颈舒缓</p>
@@ -306,6 +352,7 @@
               scrolling="no"
               allowfullscreen="true"
               frameborder="0"
+              allow="autoplay; fullscreen"
             ></iframe>
           </div>
           <p class="video-label">腰部舒缓</p>
@@ -330,14 +377,35 @@
     const TOTAL_PAGES = 11;
     let currentPage = 0;
     let touchStartX = 0;
+    let musicPlaying = false;
+    let videoPlaying = false;
 
-    // 视频URL
+    // 背景音乐
+    const bgMusic = document.getElementById('bgMusic');
+    const musicControl = document.getElementById('musicControl');
+    const musicIcon = document.getElementById('musicIcon');
+
+    // 视频URL（带自动播放）
     const SHOULDER_VIDEO_URL = 'https://player.bilibili.com/player.html?bvid=BV1vu411e7fC&page=1&autoplay=1';
     const WAIST_VIDEO_URL = 'https://player.bilibili.com/player.html?bvid=BV1pV4y1C7eu&page=1&autoplay=1';
 
     // 获取视频元素
     const shoulderVideo = document.getElementById('shoulderVideo');
     const waistVideo = document.getElementById('waistVideo');
+
+    // 切换音乐播放
+    function toggleMusic() {
+      if (musicPlaying) {
+        bgMusic.pause();
+        musicIcon.textContent = '♪';
+        musicControl.classList.remove('playing');
+      } else {
+        bgMusic.play().catch(e => console.log('播放失败:', e));
+        musicIcon.textContent = '♫';
+        musicControl.classList.add('playing');
+      }
+      musicPlaying = !musicPlaying;
+    }
 
     // 生成星星
     function createStars() {
@@ -369,16 +437,28 @@
       }
     }
 
+    // 检查是否有视频正在播放（通过检测iframe是否有内容）
+    function checkVideoPlaying() {
+      const shoulderHasSrc = shoulderVideo.src && shoulderVideo.src !== '';
+      const waistHasSrc = waistVideo.src && waistVideo.src !== '';
+      return (shoulderHasSrc && currentPage === 6) || (waistHasSrc && currentPage === 9);
+    }
+
     // 跳转到指定页面
     function goToPage(index) {
       if (index < 0 || index >= TOTAL_PAGES) return;
 
-      // 离开页面时关闭视频
+      // 离开页面时
       if (currentPage === 6) {
         shoulderVideo.src = '';
       }
       if (currentPage === 9) {
         waistVideo.src = '';
+      }
+
+      // 如果离开视频页，暂停背景音乐一会儿再恢复
+      if ((currentPage === 6 || currentPage === 9) && !videoPlaying) {
+        bgMusic.pause();
       }
 
       currentPage = index;
@@ -398,12 +478,21 @@
 
       document.querySelectorAll('.page')[currentPage].classList.add('page-enter');
 
-      // 进入页面时加载视频
+      // 进入视频页时
       if (currentPage === 6) {
         shoulderVideo.src = SHOULDER_VIDEO_URL;
-      }
-      if (currentPage === 9) {
+        videoPlaying = true;
+        bgMusic.pause(); // 视频播放时暂停背景音乐
+      } else if (currentPage === 9) {
         waistVideo.src = WAIST_VIDEO_URL;
+        videoPlaying = true;
+        bgMusic.pause(); // 视频播放时暂停背景音乐
+      } else {
+        videoPlaying = false;
+        // 非视频页面恢复背景音乐
+        if (musicPlaying) {
+          bgMusic.play().catch(e => console.log('播放失败:', e));
+        }
       }
     }
 
@@ -437,13 +526,29 @@
     }, { passive: true });
 
     document.querySelector('.app').addEventListener('click', (e) => {
-      // 如果点击的是iframe视频区域，不处理
-      if (e.target.tagName === 'IFRAME') {
+      // 如果点击的是iframe视频区域或音乐按钮，不处理
+      if (e.target.tagName === 'IFRAME' || e.target.closest('.music-control')) {
         return;
       }
       nextPage();
     });
 
+    // 页面加载完成后尝试播放音乐
+    document.addEventListener('DOMContentLoaded', () => {
+      // 用户首次交互后自动播放音乐
+      document.addEventListener('touchstart', function initMusic() {
+        if (!musicPlaying) {
+          bgMusic.play().then(() => {
+            musicPlaying = true;
+            musicIcon.textContent = '♫';
+            musicControl.classList.add('playing');
+          }).catch(e => console.log('自动播放被阻止:', e));
+        }
+        document.removeEventListener('touchstart', initMusic);
+      }, { once: true });
+    });
+
+    // 初始化
     createStars();
     createProgressDots();
     goToPage(0);
