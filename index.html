@@ -159,12 +159,13 @@
       max-width: 400px;
       margin-bottom: 20px;
       background: #FFF8DC;
+      border-radius: 12px;
+      overflow: hidden;
     }
 
     .video-wrapper iframe {
       width: 100%;
       height: 225px;
-      border-radius: 12px;
       border: none;
       display: block;
     }
@@ -262,10 +263,10 @@
       <!-- 第7页 - 肩颈视频 -->
       <div class="page" data-page="6">
         <div class="content">
-          <div class="video-wrapper">
+          <div class="video-wrapper" id="shoulderWrapper">
             <iframe
               id="shoulderVideo"
-              src="https://player.bilibili.com/player.html?bvid=BV1vu411e7fC&page=1&autoplay=0"
+              src=""
               scrolling="no"
               allowfullscreen="true"
               frameborder="0"
@@ -298,10 +299,10 @@
       <!-- 第10页 - 腰部视频 -->
       <div class="page" data-page="9">
         <div class="content">
-          <div class="video-wrapper">
+          <div class="video-wrapper" id="waistWrapper">
             <iframe
               id="waistVideo"
-              src="https://player.bilibili.com/player.html?bvid=BV1pV4y1C7eu&page=1&autoplay=0"
+              src=""
               scrolling="no"
               allowfullscreen="true"
               frameborder="0"
@@ -329,6 +330,14 @@
     const TOTAL_PAGES = 11;
     let currentPage = 0;
     let touchStartX = 0;
+
+    // 视频URL
+    const SHOULDER_VIDEO_URL = 'https://player.bilibili.com/player.html?bvid=BV1vu411e7fC&page=1&autoplay=1';
+    const WAIST_VIDEO_URL = 'https://player.bilibili.com/player.html?bvid=BV1pV4y1C7eu&page=1&autoplay=1';
+
+    // 获取视频元素
+    const shoulderVideo = document.getElementById('shoulderVideo');
+    const waistVideo = document.getElementById('waistVideo');
 
     // 生成星星
     function createStars() {
@@ -364,6 +373,14 @@
     function goToPage(index) {
       if (index < 0 || index >= TOTAL_PAGES) return;
 
+      // 离开页面时关闭视频
+      if (currentPage === 6) {
+        shoulderVideo.src = '';
+      }
+      if (currentPage === 9) {
+        waistVideo.src = '';
+      }
+
       currentPage = index;
       const pages = document.getElementById('pages');
       pages.style.transform = `translateX(-${currentPage * 100}%)`;
@@ -380,6 +397,14 @@
       }
 
       document.querySelectorAll('.page')[currentPage].classList.add('page-enter');
+
+      // 进入页面时加载视频
+      if (currentPage === 6) {
+        shoulderVideo.src = SHOULDER_VIDEO_URL;
+      }
+      if (currentPage === 9) {
+        waistVideo.src = WAIST_VIDEO_URL;
+      }
     }
 
     function nextPage() {
