@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>瑶瑶的放松小狗</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+      background-color: #FFF8DC;
+      color: #5D4E37;
+      overflow: hidden;
+      touch-action: pan-y;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    /* 星星背景 */
+    .stars {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+      overflow: hidden;
+    }
+
+    .star {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.6);
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+      animation: floatStar 4s ease-in-out infinite, breathe 3s ease-in-out infinite alternate;
+    }
+
+    @keyframes floatStar {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    @keyframes breathe {
+      0% { opacity: 0.4; }
+      100% { opacity: 0.9; }
+    }
+
+    /* 主容器 */
+    .app {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* 页面容器 */
+    .pages {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.3s ease;
+    }
+
+    .page {
+      flex: 0 0 100%;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: 10;
+      padding: 20px;
+    }
+
+    /* 进度点 */
+    .progress-dots {
+      position: fixed;
+      top: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 12px;
+      z-index: 100;
+    }
+
+    .progress-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: rgba(93, 78, 55, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    .progress-dot.active {
+      background-color: #5D4E37;
+      transform: scale(1.2);
+    }
+
+    /* 内容区域 */
+    .content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    /* 小狗图片 */
+    .dog-image {
+      width: 280px;
+      height: 280px;
+      margin-bottom: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .dog-image img {
+      max-width: 100%;
+      max-height: 100%;
+    }
+
+    /* 文字样式 */
+    .main-text {
+      font-size: 24px;
+      font-weight: 500;
+      color: #5D4E37;
+      line-height: 1.6;
+      padding: 0 20px;
+    }
+
+    /* 触摸提示 */
+    .touch-hint {
+      position: fixed;
+      bottom: 40px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      font-size: 14px;
+      color: #A0937D;
+      animation: pulse 2s ease-in-out infinite;
+      z-index: 100;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.5; }
+      50% { opacity: 1; }
+    }
+
+    /* 视频封面 */
+    .video-cover {
+      width: 90%;
+      max-width: 350px;
+      height: 200px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, #f5e6d3 0%, #e8d5c4 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+      margin-bottom: 30px;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .video-cover:active {
+      transform: scale(0.98);
+    }
+
+    .play-icon {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      background: rgba(93, 78, 55, 0.8);
+      color: #fff;
+      font-size: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 15px;
+    }
+
+    .play-text {
+      font-size: 16px;
+      color: #8B7355;
+    }
+
+    .video-label {
+      font-size: 16px;
+      color: #8B7355;
+      margin-top: 20px;
+    }
+
+    /* 视频链接 */
+    .video-link {
+      position: fixed;
+      bottom: 80px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      font-size: 14px;
+      color: #A0937D;
+      z-index: 100;
+    }
+
+    .video-link a {
+      color: #5D4E37;
+      text-decoration: underline;
+    }
+
+    /* 页面动画 */
+    .page-enter {
+      animation: fadeInUp 0.3s ease-out;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* 视频模态框 */
+    .video-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.9);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .video-modal.show {
+      display: flex;
+    }
+
+    .video-modal iframe {
+      width: 100%;
+      height: 60%;
+      max-width: 600px;
+    }
+
+    .video-modal .close-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      color: #fff;
+      font-size: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    /* Toast提示 */
+    .toast {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(93, 78, 55, 0.9);
+      color: #fff;
+      padding: 15px 30px;
+      border-radius: 10px;
+      font-size: 16px;
+      z-index: 2000;
+      display: none;
+    }
+
+    .toast.show {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <!-- 星星背景 -->
+  <div class="stars" id="stars"></div>
+
+  <!-- 主应用 -->
+  <div class="app">
+    <!-- 进度点 -->
+    <div class="progress-dots" id="progressDots"></div>
+
+    <!-- 页面容器 -->
+    <div class="pages" id="pages">
+      <!-- 第1页 - 封面 -->
+      <div class="page" data-page="0">
+        <div class="content">
+          <div class="dog-image">
+            <img src="image/来了.gif" alt="小狗">
+          </div>
+          <p class="main-text">瑶瑶，欢迎回家呀</p>
+        </div>
+      </div>
+
+      <!-- 第2页 - 问候第一句 -->
+      <div class="page" data-page="1">
+        <div class="content">
+          <div class="dog-image">
+            <img src="image/汪汪.gif" alt="小狗">
+          </div>
+          <p class="main-text">今天也认认真真忙了一整天对不对</p>
+        </div>
+      </div>
+
+      <!-- 第3页 - 问候第二句 -->
+      <div class="page" data-page="2">
+        <div class="content">
+          <div class="dog-image">
+            <img src="image/凌乱.gif" alt="小狗">
+          </div>
+          <p class="main-text">是不是累得都蔫蔫啦</p>
+        </div>
+      </div>
+
+      <!-- 第4页 - 放松开场 -->
+      <div class="page" data-page="3">
+        <div class="content">
+          <div class="dog-image">
+            <img src="image/转圈圈.gif" alt="小狗">
+          </div>
+          <p class="main-text">来跟着小狗慢慢舒展一下身体吧</p>
+        </div>
+      </div>
+
+      <!-- 第5页 - 肩颈预告 -->
+      <div class="page" data-page="4">
+        <div class="content">
+          <div class="dog-image">
+            <img src="image/期待.gif" alt="小狗">
+          </div>
+          <p class="main-text">先松一松僵掉的肩颈，好不好</p>
+        </div>
+      </div>
+
+      <!-- 第6页 - 肩颈视频 -->
+      <div class="page" data-page="5">
+        <div class="content">
+          <div class="video-cover" onclick="playVideo('shoulder')">
+            <div class="play-icon">▶</div>
+            <p class="play-text">点击播放肩颈舒缓视频</p>
+          </div>
+          <p class="video-label">肩颈舒缓</p>
+        </div>
+        <p class="video-link">
+          <a href="https://www.bilibili.com/video/BV1vu411e7fC/" target="_blank" onclick="event.stopPropagation()">完整高清视频</a>
+        </p>
+      </div>
+
+      <!-- 第7页 - 肩颈完成 -->
+      <div class="page" data-page="6">
+        <div class="content">
+          <div class="dog-image">
+            <img src="image/嘿嘿.gif" alt="小狗">
+          </div>
+          <p class="main-text">瑶瑶超棒的～肩膀是不是松快一点啦</p>
+        </div>
+      </div>
+
+      <!-- 第8页 - 腰部预告 -->
+      <div class="page" data-page="7">
+        <div class="content">
+          <div class="dog-image">
+            <img src="image/啦啦啦.gif" alt="小狗">
+          </div>
+          <p class="main-text">接着来拉一拉坐酸了的腰吧</p>
+        </div>
+      </div>
+
+      <!-- 第9页 - 腰部视频 -->
+      <div class="page" data-page="8">
+        <div class="content">
+          <div class="video-cover" onclick="playVideo('waist')">
+            <div class="play-icon">▶</div>
+            <p class="play-text">点击播放腰部舒缓视频</p>
+          </div>
+          <p class="video-label">腰部舒缓</p>
+        </div>
+        <p class="video-link">
+          <a href="https://www.bilibili.com/video/BV1pV4y1C7eu/" target="_blank" onclick="event.stopPropagation()">完整高清视频</a>
+        </p>
+      </div>
+
+      <!-- 第10页 - 腰部完成 -->
+      <div class="page" data-page="9">
+        <div class="content">
+          <div class="dog-image">
+            <img src="image/送你花花.gif" alt="小狗">
+          </div>
+          <p class="main-text">太厉害啦～腰是不是舒服多啦</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 触摸提示 -->
+    <p class="touch-hint" id="touchHint">点击任意处继续</p>
+  </div>
+
+  <!-- 视频模态框 -->
+  <div class="video-modal" id="videoModal">
+    <div class="close-btn" onclick="closeVideo()">×</div>
+    <iframe id="videoFrame" src="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // 页面配置
+    const TOTAL_PAGES = 10;
+    let currentPage = 0;
+    let touchStartX = 0;
+    let touchStartY = 0;
+
+    // B站视频ID
+    const VIDEO_IDS = {
+      shoulder: 'BV1vu411e7fC',
+      waist: 'BV1pV4y1C7eu'
+    };
+
+    // 生成星星
+    function createStars() {
+      const starsContainer = document.getElementById('stars');
+      const starCount = Math.floor(Math.random() * 6) + 15; // 15-20个
+
+      for (let i = 0; i < starCount; i++) {
+        const star = document.createElement('div');
+        star.className = 'star';
+        star.style.left = Math.random() * 100 + '%';
+        star.style.top = Math.random() * 100 + '%';
+        star.style.width = (Math.floor(Math.random() * 9) + 6) + 'px';
+        star.style.height = star.style.width;
+        star.style.animationDelay = Math.random() * 5 + 's';
+        star.style.animationDuration = (Math.random() * 3 + 3) + 's';
+        starsContainer.appendChild(star);
+      }
+    }
+
+    // 生成进度点
+    function createProgressDots() {
+      const container = document.getElementById('progressDots');
+      container.innerHTML = '';
+      for (let i = 0; i < TOTAL_PAGES; i++) {
+        const dot = document.createElement('div');
+        dot.className = 'progress-dot' + (i === currentPage ? ' active' : '');
+        dot.dataset.index = i;
+        container.appendChild(dot);
+      }
+    }
+
+    // 跳转到指定页面
+    function goToPage(index) {
+      if (index < 0 || index >= TOTAL_PAGES) return;
+
+      currentPage = index;
+      const pages = document.getElementById('pages');
+      pages.style.transform = `translateX(-${currentPage * 100}%)`;
+
+      // 更新进度点
+      document.querySelectorAll('.progress-dot').forEach((dot, i) => {
+        dot.className = 'progress-dot' + (i === currentPage ? ' active' : '');
+      });
+
+      // 更新触摸提示
+      const hint = document.getElementById('touchHint');
+      if (currentPage === TOTAL_PAGES - 1) {
+        hint.textContent = '右滑返回 · 点击重新开始';
+      } else {
+        hint.textContent = '点击任意处继续';
+      }
+
+      // 添加动画
+      document.querySelectorAll('.page')[currentPage].classList.add('page-enter');
+    }
+
+    // 下一页
+    function nextPage() {
+      if (currentPage < TOTAL_PAGES - 1) {
+        goToPage(currentPage + 1);
+      } else {
+        // 最后一页重新开始
+        goToPage(0);
+      }
+    }
+
+    // 上一页
+    function prevPage() {
+      if (currentPage > 0) {
+        goToPage(currentPage - 1);
+      }
+    }
+
+    // 播放视频
+    function playVideo(type) {
+      const modal = document.getElementById('videoModal');
+      const frame = document.getElementById('videoFrame');
+      const videoId = VIDEO_IDS[type];
+
+      // 使用B站嵌入式播放器
+      frame.src = `https://player.bilibili.com/player.html?bvid=${videoId}&page=1&autoplay=1`;
+      modal.classList.add('show');
+    }
+
+    // 关闭视频
+    function closeVideo() {
+      const modal = document.getElementById('videoModal');
+      const frame = document.getElementById('videoFrame');
+      frame.src = '';
+      modal.classList.remove('show');
+    }
+
+    // 显示Toast
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2000);
+    }
+
+    // 触摸事件
+    document.addEventListener('touchstart', (e) => {
+      touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+    }, { passive: true });
+
+    document.addEventListener('touchend', (e) => {
+      const touchEndX = e.changedTouches[0].clientX;
+      const touchEndY = e.changedTouches[0].clientY;
+      const deltaX = touchEndX - touchStartX;
+      const deltaY = touchEndY - touchStartY;
+
+      // 判断为水平滑动
+      if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 50) {
+        if (deltaX < 0) {
+          nextPage();
+        } else {
+          prevPage();
+        }
+      }
+    }, { passive: true });
+
+    // 点击事件
+    document.querySelector('.app').addEventListener('click', (e) => {
+      // 如果点击的是视频区域，不处理
+      if (e.target.closest('.video-cover') || e.target.closest('.video-link')) {
+        return;
+      }
+      nextPage();
+    });
+
+    // 点击模态框外部关闭
+    document.getElementById('videoModal').addEventListener('click', (e) => {
+      if (e.target.id === 'videoModal') {
+        closeVideo();
+      }
+    });
+
+    // 初始化
+    createStars();
+    createProgressDots();
+    goToPage(0);
+  </script>
+</body>
+</html>
