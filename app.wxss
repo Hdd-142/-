@@ -1,0 +1,170 @@
+/* 全局样式 - 瑶瑶的放松小狗 */
+
+page {
+  /* 全局背景色 - 温暖鹅黄色 */
+  background-color: #FFF8DC;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+  color: #5D4E37;
+}
+
+/* 页面通用容器 */
+.page-container {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* 内容区域 */
+.content-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  padding: 40rpx;
+  text-align: center;
+}
+
+/* 小狗图片容器 */
+.dog-image-container {
+  width: 400rpx;
+  height: 400rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 60rpx;
+}
+
+.dog-image {
+  width: 100%;
+  height: 100%;
+}
+
+/* 文字样式 */
+.main-text {
+  font-size: 48rpx;
+  font-weight: 500;
+  color: #5D4E37;
+  line-height: 1.6;
+  text-align: center;
+}
+
+.sub-text {
+  font-size: 32rpx;
+  color: #8B7355;
+  margin-top: 20rpx;
+  text-align: center;
+}
+
+/* 页面转场动画 */
+.page-fade-in {
+  animation: fadeInUp 300ms ease-out forwards;
+}
+
+.page-fade-out {
+  animation: fadeOutDown 300ms ease-in forwards;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30rpx);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeOutDown {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-30rpx);
+  }
+}
+
+/* 视频播放器容器 */
+.video-container {
+  width: 600rpx;
+  height: 340rpx;
+  border-radius: 20rpx;
+  overflow: hidden;
+  box-shadow: 0 10rpx 30rpx rgba(0, 0, 0, 0.1);
+  margin-bottom: 40rpx;
+}
+
+video {
+  width: 100%;
+  height: 100%;
+}
+
+/* 进度点样式 */
+.progress-dots {
+  position: fixed;
+  top: 30rpx;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 16rpx;
+  z-index: 100;
+}
+
+.progress-dot {
+  width: 12rpx;
+  height: 12rpx;
+  border-radius: 50%;
+  background-color: rgba(93, 78, 55, 0.3);
+  transition: all 300ms ease;
+}
+
+.progress-dot.active {
+  background-color: #5D4E37;
+  transform: scale(1.2);
+}
+
+/* 视频标注文字 */
+.video-label {
+  font-size: 28rpx;
+  color: #8B7355;
+  text-align: center;
+  margin-top: 30rpx;
+}
+
+/* 视频链接提示 */
+.video-link {
+  font-size: 24rpx;
+  color: #A0937D;
+  text-align: center;
+  margin-top: 60rpx;
+  padding: 0 40rpx;
+  line-height: 1.5;
+}
+
+/* 触摸提示 */
+.touch-hint {
+  position: fixed;
+  bottom: 60rpx;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 24rpx;
+  color: #A0937D;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}

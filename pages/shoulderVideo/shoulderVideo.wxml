@@ -1,0 +1,19 @@
+<!-- 第6页 - 肩颈舒缓视频页 -->
+<view class="page-container {{animationClass}}" bind:touchstart="onTouchStart" bind:ouchend="onTouchEnd" bind:tap="onPageTap">
+  <view class="progress-dots">
+    <block wx:for="{{progressDots}}" wx:key="index">
+      <view class="progress-dot {{item.active ? 'active' : ''}}"></view>
+    </block>
+  </view>
+
+  <view class="content-wrapper">
+    <!-- 视频封面区域 -->
+    <view class="video-cover" bind:tap="onPlayVideo">
+      <view class="play-icon">▶</view>
+      <text class="play-text">点击播放肩颈舒缓视频</text>
+    </view>
+    <text class="video-label">肩颈舒缓</text>
+  </view>
+
+  <text class="touch-hint">点击任意处继续</text>
+</view>

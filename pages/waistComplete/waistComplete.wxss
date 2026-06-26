@@ -1,0 +1,17 @@
+/* 第10页 - 腰部完成鼓励样式 */
+
+/* 最后一页特殊样式 */
+.main-text {
+  font-size: 48rpx;
+  font-weight: 500;
+  color: #5D4E37;
+  line-height: 1.6;
+  text-align: center;
+}
+
+.touch-hint {
+  font-size: 24rpx;
+  color: #A0937D;
+  animation: none;
+  opacity: 0.7;
+}

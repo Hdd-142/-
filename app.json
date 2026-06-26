@@ -1,0 +1,23 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/greeting1/greeting1",
+    "pages/greeting2/greeting2",
+    "pages/relaxIntro/relaxIntro",
+    "pages/shoulderPreview/shoulderPreview",
+    "pages/shoulderVideo/shoulderVideo",
+    "pages/shoulderComplete/shoulderComplete",
+    "pages/waistPreview/waistPreview",
+    "pages/waistVideo/waistVideo",
+    "pages/waistComplete/waistComplete"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#FFF8DC",
+    "navigationBarTitleText": "瑶瑶的放松小狗",
+    "navigationBarTextStyle": "black"
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents"
+}

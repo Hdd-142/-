@@ -1,0 +1,17 @@
+<!-- 第3页 - 问候第二句 -->
+<view class="page-container {{animationClass}}" bind:touchstart="onTouchStart" bind:touchend="onTouchEnd" bind:tap="onPageTap">
+  <view class="progress-dots">
+    <block wx:for="{{progressDots}}" wx:key="index">
+      <view class="progress-dot {{item.active ? 'active' : ''}}"></view>
+    </block>
+  </view>
+
+  <view class="content-wrapper">
+    <view class="dog-image-container">
+      <image class="dog-image" src="{{dogImageSrc}}" mode="aspectFit" lazy-load />
+    </view>
+    <text class="main-text">是不是累得都蔫蔫啦</text>
+  </view>
+
+  <text class="touch-hint">点击任意处继续</text>
+</view>

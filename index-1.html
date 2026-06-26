@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="format-detection" content="telephone=no">
+  <title>瑶瑶的放松小狗</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+    html,body{
+      height:100%;
+      overflow:hidden;
+      touch-action:manipulation;
+    }
+    body{
+      font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif;
+      background:#FFF8DC;
+      color:#5D4E37;
+      -webkit-font-smoothing:antialiased;
+      position:fixed;
+      width:100%;
+      height:100%;
+      overflow:hidden;
+      overscroll-behavior:none;
+    }
+    .app{
+      position:relative;
+      width:100%;
+      height:100%;
+      min-height:100vh;
+      min-height:-webkit-fill-available;
+      overscroll-behavior:none;
+    }
+    .pages{
+      display:flex;
+      width:100%;
+      height:100%;
+      will-change:transform;
+    }
+    .page{
+      flex:0 0 100%;
+      width:100%;
+      height:100%;
+      min-height:100vh;
+      min-height:-webkit-fill-available;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+      padding-top:50px;
+      padding-bottom:50px;
+    }
+    .dots{
+      position:fixed;
+      top:15px;
+      left:50%;
+      transform:translateX(-50%);
+      display:flex;
+      gap:6px;
+      z-index:100;
+    }
+    .dot{
+      width:6px;
+      height:6px;
+      border-radius:50%;
+      background:rgba(93,78,55,0.3);
+    }
+    .dot.active{
+      background:#5D4E37;
+    }
+    .img-box{
+      width:200px;
+      height:200px;
+      margin-bottom:20px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .img-box img{
+      max-width:100%;
+      max-height:100%;
+      width:auto;
+      height:auto;
+      object-fit:contain;
+    }
+    .title{
+      font-size:20px;
+      font-weight:500;
+      text-align:center;
+      color:#5D4E37;
+      line-height:1.4;
+    }
+    .desc{
+      font-size:15px;
+      color:#8B7355;
+      margin-top:8px;
+      text-align:center;
+    }
+    .small{
+      font-size:12px;
+      color:#A0937D;
+      margin-top:5px;
+      text-align:center;
+    }
+    .hint{
+      position:fixed;
+      bottom:25px;
+      left:0;
+      right:0;
+      text-align:center;
+      font-size:12px;
+      color:#A0937D;
+    }
+    .music{
+      position:fixed;
+      top:env(safe-area-inset-top, 15px);
+      top:calc(env(safe-area-inset-top, 15px) + 10px);
+      right:15px;
+      width:36px;
+      height:36px;
+      border-radius:50%;
+      background:rgba(93,78,55,0.9);
+      color:#fff;
+      font-size:16px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      z-index:200;
+      cursor:pointer;
+      -webkit-tap-highlight-color:transparent;
+      user-select:none;
+      box-shadow:0 2px 8px rgba(0,0,0,0.15);
+    }
+    .video-box{
+      width:95%;
+      max-width:360px;
+      margin-bottom:15px;
+      border-radius:10px;
+      overflow:hidden;
+      background:#000;
+    }
+    .video-box iframe{
+      width:100%;
+      height:220px;
+      border:none;
+      display:block;
+    }
+    @media (max-width:380px) {
+      .video-box iframe{
+        height:200px;
+      }
+    }
+    @media (min-width:768px) {
+      .video-box iframe{
+        height:300px;
+      }
+    }
+    .video-tip{
+      font-size:13px;
+      color:#8B7355;
+      text-align:center;
+    }
+    .heat-wrap{
+      display:flex;
+      gap:15px;
+      margin-bottom:20px;
+    }
+    .heat-item{
+      text-align:center;
+    }
+    .heat-item img{
+      width:90px;
+      height:auto;
+    }
+    .heat-tip{
+      font-size:12px;
+      color:#8B7355;
+      margin-top:5px;
+    }
+    .gel-img{
+      width:150px;
+      margin-bottom:15px;
+    }
+    .choice-wrap{
+      margin-top:20px;
+      opacity:0;
+      transition:opacity 0.3s;
+    }
+    .choice-wrap.show{
+      opacity:1;
+    }
+    .choice-btns{
+      display:flex;
+      gap:25px;
+      justify-content:center;
+    }
+    .choice-btn{
+      width:80px;
+      height:44px;
+      border-radius:22px;
+      background:rgba(255,248,220,0.95);
+      border:2px solid #5D4E37;
+      font-size:18px;
+      color:#5D4E37;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+      transition:all 0.2s;
+      -webkit-tap-highlight-color:transparent;
+      user-select:none;
+    }
+    .choice-btn:active{
+      transform:scale(0.95);
+      background:#5D4E37;
+      color:#FFF8DC;
+    }
+    .choice-btn.disabled{
+      opacity:0.5;
+    }
+    .choice-btn.hidden{
+      display:none;
+    }
+    .hint-text{
+      font-size:12px;
+      color:#A0937D;
+      margin-top:8px;
+      text-align:center;
+    }
+    .result-text{
+      font-size:14px;
+      color:#8B7355;
+      margin-top:15px;
+      text-align:center;
+      line-height:1.5;
+    }
+  </style>
+</head>
+<body>
+  <!-- 背景音乐 -->
+  <audio id="bgm" loop>
+    <source src="video/背景音乐.m4a" type="audio/mp4">
+  </audio>
+
+  <!-- 音乐按钮 -->
+  <div class="music" id="musicBtn">♪</div>
+
+  <!-- 进度点 -->
+  <div class="dots" id="dots"></div>
+
+  <!-- 页面容器 -->
+  <div class="pages" id="pages">
+
+    <!-- 第1页 -->
+    <div class="page">
+      <div class="img-box"><img src="image/来了.gif" alt=""></div>
+      <p class="title">瑶瑶，欢迎回家呀</p>
+    </div>
+
+    <!-- 第2页 -->
+    <div class="page">
+      <div class="img-box"><img src="image/汪汪.gif" alt=""></div>
+      <p class="title">今天也认认真真忙了一整天对不对</p>
+    </div>
+
+    <!-- 第3页 -->
+    <div class="page">
+      <div class="img-box"><img src="image/凌乱.gif" alt=""></div>
+      <p class="title">是不是累得都蔫蔫啦</p>
+    </div>
+
+    <!-- 第4页 -->
+    <div class="page">
+      <div class="img-box"><img src="image/转圈圈.gif" alt=""></div>
+      <p class="title">来跟着小狗慢慢舒展一下身体吧</p>
+    </div>
+
+    <!-- 第5页 -->
+    <div class="page">
+      <div class="img-box"><img src="image/期待.gif" alt=""></div>
+      <p class="title">先松一松僵掉的肩颈，好不好</p>
+    </div>
+
+    <!-- 第6页 -->
+    <div class="page">
+      <div class="img-box"><img src="image/锻炼.gif" alt=""></div>
+      <p class="title">小狗亲自试过，</p>
+      <p class="desc">真的很有效的哦</p>
+    </div>
+
+    <!-- 第7页 视频 -->
+    <div class="page">
+      <div class="video-box"><iframe id="sv" src="" frameborder="0"></iframe></div>
+      <p class="video-tip">肩颈舒缓</p>
+    </div>
+
+    <!-- 第8页 -->
+    <div class="page">
+      <div class="img-box"><img src="image/嘿嘿.gif" alt=""></div>
+      <p class="title">瑶瑶超棒的～肩膀是不是松快一点啦</p>
+    </div>
+
+    <!-- 第9页 -->
+    <div class="page">
+      <div class="img-box"><img src="image/啦啦啦.gif" alt=""></div>
+      <p class="title">接着来拉一拉坐酸了的腰吧</p>
+    </div>
+
+    <!-- 第10页 视频 -->
+    <div class="page">
+      <div class="video-box"><iframe id="wv" src="" frameborder="0"></iframe></div>
+      <p class="video-tip">腰部舒缓</p>
+    </div>
+
+    <!-- 第11页 -->
+    <div class="page">
+      <div class="img-box"><img src="image/送你花花.gif" alt=""></div>
+      <p class="title">太厉害啦～腰是不是舒服多啦</p>
+    </div>
+
+    <!-- 第12页 -->
+    <div class="page">
+      <div class="img-box"><img src="image/有我呢.gif" alt=""></div>
+      <p class="title">对啦～</p>
+      <p class="desc">要是胸口有点胀胀的不舒服</p>
+      <p class="small">小狗有几个温柔的小办法哦</p>
+    </div>
+
+    <!-- 第13页 -->
+    <div class="page">
+      <p class="desc">第一个小办法 · 冷热交替敷</p>
+      <div class="heat-wrap">
+        <div class="heat-item">
+          <img src="image/热水袋.png" alt="">
+          <p class="heat-tip">3分钟</p>
+        </div>
+        <div class="heat-item">
+          <img src="image/毛巾.png" alt="">
+          <p class="heat-tip">1分钟</p>
+        </div>
+      </div>
+      <p class="desc">暖水袋温敷3分钟，冷水湿毛巾敷1分钟</p>
+      <p class="small">重复3轮，胀胀的感觉会轻很多哦</p>
+    </div>
+
+    <!-- 第14页 -->
+    <div class="page">
+      <div class="img-box"><img src="image/吃饭饭.gif" alt=""></div>
+      <p class="desc">少喝奶茶、可乐、浓茶哦</p>
+      <p class="desc">吃清淡少盐，胀感会悄悄减轻</p>
+      <p class="desc">平时吃点坚果，香蕉也有帮助呀</p>
+      <p class="small">（瑶瑶不爱吃就算了）</p>
+    </div>
+
+    <!-- 第15页 -->
+    <div class="page">
+      <p class="title">还有一个小提醒呀</p>
+      <img class="gel-img" src="image/布洛芬凝胶.png" alt="">
+      <p class="desc">要是胀感实在明显</p>
+      <p class="desc">可以问问医生能不能用外用凝胶</p>
+      <p class="small">一定要听医生的话使用哦</p>
+    </div>
+
+    <!-- 第16页 -->
+    <div class="page">
+      <div class="img-box"><img src="image/撒花花.gif" alt=""></div>
+      <p class="title">瑶瑶超厉害！全部都完成啦～</p>
+      <p class="desc">今天也辛苦啦，好好歇一歇吧</p>
+    </div>
+
+    <!-- 第17页 -->
+    <div class="page">
+      <div class="img-box"><img src="image/喜欢.gif" alt=""></div>
+      <p class="title">现在有没有舒服一点呀？</p>
+      <p class="desc">瑶瑶开心的话，小狗也会跟着开心哦</p>
+    </div>
+
+    <!-- 第18页 -->
+    <div class="page">
+      <div class="img-box"><img src="image/学习.gif" alt=""></div>
+      <p class="title">这是小狗学Ai顺便做的呢</p>
+      <p class="desc">小狗是不是很厉害</p>
+    </div>
+
+    <!-- 第19页 -->
+    <div class="page">
+      <div class="img-box"><img src="image/完成.gif" alt=""></div>
+      <p class="title">小狗一边学一边做</p>
+      <p class="desc">掌握了不少东西呢！</p>
+    </div>
+
+    <!-- 第20页 -->
+    <div class="page">
+      <div class="img-box"><img src="image/依偎.gif" alt=""></div>
+      <p class="title">小狗知道瑶瑶在乎小狗</p>
+      <p class="desc">所以为小狗想了很多很多</p>
+    </div>
+
+    <!-- 第21页 -->
+    <div class="page">
+      <div class="img-box"><img src="image/快乐.gif" alt=""></div>
+      <p class="title">你看，小狗心里挂念着瑶瑶</p>
+      <p class="desc">小狗会学得更用心，更踏实呢！</p>
+    </div>
+
+    <!-- 第22页 -->
+    <div class="page">
+      <div class="img-box"><img src="image/更好更好.gif" alt=""></div>
+      <p class="title">所以小狗相信，我们拥有彼此</p>
+      <p class="desc">未来一定会更好更好的呢！</p>
+    </div>
+
+    <!-- 第23页 -->
+    <div class="page">
+      <p class="title" style="font-size:32px">所以……</p>
+    </div>
+
+    <!-- 第24页 选择 -->
+    <div class="page">
+      <div class="img-box"><img id="choiceImg" src="image/哭唧唧.gif" alt=""></div>
+      <p id="choiceTitle" class="desc" style="font-size:20px;font-weight:bold">不要再赶小狗走了</p>
+      <p id="choiceAsk" class="title" style="font-size:28px;margin-top:15px;opacity:0">好不好</p>
+      <div id="choiceWrap" class="choice-wrap">
+        <div class="choice-btns">
+          <div class="choice-btn" id="btnYes" onclick="chooseYes()">好</div>
+          <div class="choice-btn" id="btnNo" onclick="chooseNo()">不好</div>
+        </div>
+      </div>
+      <p id="choiceHint" class="hint-text" style="display:none"></p>
+      <p id="choiceResult" class="result-text" style="display:none"></p>
+    </div>
+
+  </div>
+
+  <p class="hint" id="hint">点击任意处继续</p>
+
+  <script>
+    // 变量
+    var total = 24;
+    var cur = 0;
+    var startX = 0;
+    var startY = 0;
+    var isPlaying = false;
+    var chosen = false;
+    var noCount = 0;
+    var hasUserInteracted = false;
+
+    // 元素
+    var bgm = document.getElementById('bgm');
+    var musicBtn = document.getElementById('musicBtn');
+    var dotsEl = document.getElementById('dots');
+    var pagesEl = document.getElementById('pages');
+    var sv = document.getElementById('sv');
+    var wv = document.getElementById('wv');
+    var hintEl = document.getElementById('hint');
+
+    // 视频链接（移动端适配）
+    var svUrl = 'https://player.bilibili.com/player.html?bvid=BV1vu411e7fC&page=1&autoplay=0&as_wide=1&high_quality=1&danmaku=0';
+    var wvUrl = 'https://player.bilibili.com/player.html?bvid=BV1pV4y1C7eu&page=1&autoplay=0&as_wide=1&high_quality=1&danmaku=0';
+
+    // 生成进度点
+    function createDots() {
+      var html = '';
+      for (var i = 0; i < total; i++) {
+        html += '<div class="dot' + (i === cur ? ' active' : '') + '"></div>';
+      }
+      dotsEl.innerHTML = html;
+    }
+
+    // 跳转到页面
+    function goTo(index) {
+      if (index < 0 || index >= total) return;
+
+      // 离开视频页，清空视频
+      if (cur === 6) sv.src = '';
+      if (cur === 9) wv.src = '';
+
+      // 重置选择页
+      if (index !== 23) {
+        chosen = false;
+        noCount = 0;
+        document.getElementById('choiceImg').src = 'image/哭唧唧.gif';
+        document.getElementById('choiceTitle').style.display = 'block';
+        document.getElementById('choiceTitle').textContent = '不要再赶小狗走了';
+        document.getElementById('choiceTitle').style.fontSize = '20px';
+        document.getElementById('choiceAsk').style.display = 'block';
+        document.getElementById('choiceAsk').style.opacity = '0';
+        document.getElementById('choiceWrap').style.display = 'flex';
+        document.getElementById('choiceWrap').classList.remove('show');
+        document.getElementById('choiceResult').style.display = 'none';
+        document.getElementById('choiceHint').style.display = 'none';
+        document.getElementById('btnNo').classList.remove('disabled', 'hidden');
+      }
+
+      cur = index;
+      pagesEl.style.transform = 'translateX(-' + (cur * 100) + '%)';
+
+      // 更新提示
+      hintEl.textContent = cur === total - 1 ? '请做出选择' : '点击任意处继续';
+
+      // 更新进度点
+      createDots();
+
+      // 进入视频页，加载视频
+      if (cur === 6) {
+        sv.src = svUrl;
+        if (isPlaying) bgm.pause();
+      } else if (cur === 9) {
+        wv.src = wvUrl;
+        if (isPlaying) bgm.pause();
+      } else if (isPlaying && bgm.paused) {
+        bgm.play();
+      }
+
+      // 进入选择页，显示选项
+      if (cur === 23) {
+        setTimeout(function() {
+          document.getElementById('choiceAsk').style.opacity = '1';
+        setTimeout(function() {
+          document.getElementById('choiceWrap').classList.add('show');
+        }, 500);
+      });
+      }
+    }
+
+    // 下一页
+    function nextPage() {
+      goTo(cur < total - 1 ? cur + 1 : 0);
+    }
+
+    // 上一页
+    function prevPage() {
+      if (cur > 0) goTo(cur - 1);
+    }
+
+    // 切换音乐
+    function toggleMusic() {
+      if (bgm.paused) {
+        bgm.play();
+        isPlaying = true;
+        musicBtn.textContent = '♫';
+      } else {
+        bgm.pause();
+        isPlaying = false;
+        musicBtn.textContent = '♪';
+      }
+    }
+
+    // 选择好
+    function chooseYes() {
+      if (chosen) return;
+      chosen = true;
+
+      document.getElementById('choiceImg').src = 'image/呀呼.gif';
+      document.getElementById('choiceWrap').style.display = 'none';
+      document.getElementById('choiceAsk').style.display = 'none';
+      document.getElementById('choiceTitle').style.display = 'none';
+      document.getElementById('choiceResult').style.display = 'block';
+      document.getElementById('choiceResult').innerHTML = '瑶瑶最好了！快去找小狗吧！<br>他一定很想很想你';
+
+      setTimeout(function() {
+        window.location.href = 'weixin://';
+      }, 2000);
+    }
+
+    // 选择不好
+    function chooseNo() {
+      noCount++;
+
+      if (noCount === 1) {
+        document.getElementById('choiceImg').src = 'image/呜呜呜.gif';
+        document.getElementById('choiceTitle').textContent = '呜……不行的呀，小狗已经赖上瑶瑶了';
+        document.getElementById('btnNo').classList.add('disabled');
+        document.getElementById('choiceHint').style.display = 'block';
+        document.getElementById('choiceHint').textContent = '就选好嘛～';
+      } else if (noCount >= 2) {
+        document.getElementById('choiceImg').src = 'image/拉粑粑.gif';
+        document.getElementById('choiceTitle').textContent = '哼，坏瑶瑶吃大便！！';
+        document.getElementById('btnNo').classList.add('hidden');
+        document.getElementById('choiceHint').style.display = 'none';
+      }
+    }
+
+    // 触摸开始
+    document.addEventListener('touchstart', function(e) {
+      startX = e.touches[0].clientX;
+      startY = e.touches[0].clientY;
+    }, { passive: true });
+
+    // 触摸结束
+    document.addEventListener('touchend', function(e) {
+      var endX = e.changedTouches[0].clientX;
+      var endY = e.changedTouches[0].clientY;
+      var dx = endX - startX;
+      var dy = endY - startY;
+
+      // 判断是否为滑动（水平滑动距离大于垂直滑动距离）
+      if (Math.abs(dx) > 30 && Math.abs(dx) > Math.abs(dy)) {
+        if (dx < 0) {
+          nextPage();
+        } else {
+          prevPage();
+        }
+      }
+    }, { passive: true });
+
+    // 点击事件
+    document.querySelector('.app').addEventListener('click', function(e) {
+      // 排除按钮、视频、music按钮
+      if (e.target.classList.contains('choice-btn')) return;
+      if (e.target.tagName === 'IFRAME') return;
+      if (e.target.id === 'musicBtn') return;
+      nextPage();
+    });
+
+    // 尝试自动播放音乐（移动端需要用户交互）
+    function tryPlayBgm() {
+      if (hasUserInteracted) return;
+      hasUserInteracted = true;
+
+      bgm.play().then(function() {
+        isPlaying = true;
+        musicBtn.textContent = '♫';
+      }).catch(function() {
+        console.log('音频播放需要用户交互');
+      });
+    }
+
+    // 音乐按钮点击
+    musicBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      tryPlayBgm();
+      toggleMusic();
+    });
+
+    musicBtn.addEventListener('touchend', function(e) {
+      e.stopPropagation();
+      e.preventDefault();
+      tryPlayBgm();
+      toggleMusic();
+    }, { passive: false });
+
+    // 初始化音乐播放（移动端）
+    function initAudio() {
+      // 尝试预加载音频
+      bgm.load();
+
+      // 监听首次用户交互来播放
+      var events = ['touchstart', 'touchend', 'click', 'scroll'];
+      var initOnce = function() {
+        tryPlayBgm();
+        events.forEach(function(evt) {
+          document.removeEventListener(evt, initOnce);
+        });
+      };
+      events.forEach(function(evt) {
+        document.addEventListener(evt, initOnce, { once: true, passive: true });
+      });
+    }
+
+    // 初始化
+    createDots();
+    goTo(0);
+    initAudio();
+  </script>
+</body>
+</html>

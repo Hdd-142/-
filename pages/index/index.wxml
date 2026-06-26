@@ -1,0 +1,33 @@
+<!--
+  第1页 - 封面页面
+  功能：显示欢迎小狗表情和主标题「瑶瑶，欢迎回家呀」
+-->
+<view class="page-container {{animationClass}}" bind:touchstart="onTouchStart" bind:touchend="onTouchEnd" bind:tap="onPageTap">
+
+  <!-- 进度点 -->
+  <view class="progress-dots">
+    <block wx:for="{{progressDots}}" wx:key="index">
+      <view class="progress-dot {{item.active ? 'active' : ''}}"></view>
+    </block>
+  </view>
+
+  <!-- 主内容区域 -->
+  <view class="content-wrapper">
+    <!-- 小狗「来了」表情图片 -->
+    <view class="dog-image-container">
+      <image
+        class="dog-image"
+        src="{{dogImageSrc}}"
+        mode="aspectFit"
+        lazy-load
+      />
+    </view>
+
+    <!-- 主标题文字 -->
+    <text class="main-text">瑶瑶，欢迎回家呀</text>
+  </view>
+
+  <!-- 触摸提示 -->
+  <text class="touch-hint">点击任意处继续</text>
+
+</view>

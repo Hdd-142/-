@@ -1,0 +1,18 @@
+<!-- 第10页 - 腰部完成鼓励 -->
+<view class="page-container {{animationClass}}" bind:touchstart="onTouchStart" bind:touchend="onTouchEnd" bind:tap="onPageTap">
+  <view class="progress-dots">
+    <block wx:for="{{progressDots}}" wx:key="index">
+      <view class="progress-dot {{item.active ? 'active' : ''}}"></view>
+    </block>
+  </view>
+
+  <view class="content-wrapper">
+    <view class="dog-image-container">
+      <image class="dog-image" src="{{dogImageSrc}}" mode="aspectFit" lazy-load />
+    </view>
+    <text class="main-text">太厉害啦～腰是不是舒服多啦</text>
+  </view>
+
+  <!-- 最后一页提示可以重新开始 -->
+  <text class="touch-hint">右滑返回 · 点击重新开始</text>
+</view>
