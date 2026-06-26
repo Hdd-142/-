@@ -4,6 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>瑶瑶的放松小狗</title>
+
+  <!-- 预加载关键资源 -->
+  <link rel="preconnect" href="https://player.bilibili.com">
+  <link rel="dns-prefetch" href="https://player.bilibili.com">
+
   <style>
     * {
       margin: 0;
@@ -22,6 +27,30 @@
       -webkit-user-select: none;
     }
 
+    /* 图片占位加载 */
+    .dog-image {
+      width: 280px;
+      height: 280px;
+      margin-bottom: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 248, 220, 0.5);
+      border-radius: 20px;
+    }
+
+    .dog-image img {
+      max-width: 100%;
+      max-height: 100%;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .dog-image img.loaded {
+      opacity: 1;
+    }
+
+    /* 星星背景优化 - 使用CSS动画减少重绘 */
     .stars {
       position: fixed;
       top: 0;
@@ -39,6 +68,7 @@
       background: rgba(255, 255, 255, 0.6);
       box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
       animation: floatStar 4s ease-in-out infinite, breathe 3s ease-in-out infinite alternate;
+      will-change: transform, opacity;
     }
 
     @keyframes floatStar {
@@ -63,6 +93,7 @@
       width: 100%;
       height: 100%;
       transition: transform 0.3s ease;
+      will-change: transform;
     }
 
     .page {
@@ -76,6 +107,7 @@
       position: relative;
       z-index: 10;
       padding: 20px;
+      contain: layout style paint;
     }
 
     .progress-dots {
@@ -106,20 +138,6 @@
       flex-direction: column;
       align-items: center;
       text-align: center;
-    }
-
-    .dog-image {
-      width: 280px;
-      height: 280px;
-      margin-bottom: 40px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .dog-image img {
-      max-width: 100%;
-      max-height: 100%;
     }
 
     .main-text {
@@ -189,17 +207,10 @@
     }
 
     @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
-    /* 音乐控制按钮 */
     .music-control {
       position: fixed;
       top: 30px;
@@ -216,9 +227,7 @@
       transition: transform 0.2s;
     }
 
-    .music-control:active {
-      transform: scale(0.9);
-    }
+    .music-control:active { transform: scale(0.9); }
 
     .music-icon {
       font-size: 20px;
@@ -234,7 +243,6 @@
       to { transform: rotate(360deg); }
     }
 
-    /* 冷热敷图片组合 */
     .heat-cold-container {
       display: flex;
       align-items: flex-end;
@@ -247,7 +255,7 @@
       position: relative;
     }
 
-    .heat-item img {
+    .heat-item img, .heat-item {
       width: 120px;
       height: auto;
     }
@@ -262,14 +270,12 @@
       white-space: nowrap;
     }
 
-    /* 凝胶图片 */
     .gel-image {
       width: 200px;
       height: auto;
       margin-bottom: 30px;
     }
 
-    /* 多行文字样式 */
     .text-line {
       font-size: 18px;
       color: #8B7355;
@@ -285,12 +291,11 @@
   </style>
 </head>
 <body>
-  <!-- 背景音乐 -->
-  <audio id="bgMusic" loop>
+  <!-- 预加载音频 -->
+  <audio id="bgMusic" preload="auto">
     <source src="video/背景音乐.m4a" type="audio/mp4">
   </audio>
 
-  <!-- 音乐控制按钮 -->
   <div class="music-control" id="musicControl" onclick="toggleMusic()">
     <span class="music-icon" id="musicIcon">♪</span>
   </div>
@@ -299,170 +304,109 @@
 
   <div class="app">
     <div class="progress-dots" id="progressDots"></div>
-
     <div class="pages" id="pages">
-      <!-- 第1页 - 封面 -->
       <div class="page" data-page="0">
         <div class="content">
-          <div class="dog-image">
-            <img src="image/来了.gif" alt="小狗">
-          </div>
+          <div class="dog-image"><img src="image/来了.gif" alt="小狗" loading="lazy"></div>
           <p class="main-text">瑶瑶，欢迎回家呀</p>
         </div>
       </div>
 
-      <!-- 第2页 - 问候第一句 -->
       <div class="page" data-page="1">
         <div class="content">
-          <div class="dog-image">
-            <img src="image/汪汪.gif" alt="小狗">
-          </div>
+          <div class="dog-image"><img src="image/汪汪.gif" alt="小狗" loading="lazy"></div>
           <p class="main-text">今天也认认真真忙了一整天对不对</p>
         </div>
       </div>
 
-      <!-- 第3页 - 问候第二句 -->
       <div class="page" data-page="2">
         <div class="content">
-          <div class="dog-image">
-            <img src="image/凌乱.gif" alt="小狗">
-          </div>
+          <div class="dog-image"><img src="image/凌乱.gif" alt="小狗" loading="lazy"></div>
           <p class="main-text">是不是累得都蔫蔫啦</p>
         </div>
       </div>
 
-      <!-- 第4页 - 放松开场 -->
       <div class="page" data-page="3">
         <div class="content">
-          <div class="dog-image">
-            <img src="image/转圈圈.gif" alt="小狗">
-          </div>
+          <div class="dog-image"><img src="image/转圈圈.gif" alt="小狗" loading="lazy"></div>
           <p class="main-text">来跟着小狗慢慢舒展一下身体吧</p>
         </div>
       </div>
 
-      <!-- 第5页 - 肩颈预告 -->
       <div class="page" data-page="4">
         <div class="content">
-          <div class="dog-image">
-            <img src="image/期待.gif" alt="小狗">
-          </div>
+          <div class="dog-image"><img src="image/期待.gif" alt="小狗" loading="lazy"></div>
           <p class="main-text">先松一松僵掉的肩颈，好不好</p>
         </div>
       </div>
 
-      <!-- 第6页 - 亲自尝试 -->
       <div class="page" data-page="5">
         <div class="content">
-          <div class="dog-image">
-            <img src="image/锻炼.gif" alt="小狗">
-          </div>
+          <div class="dog-image"><img src="image/锻炼.gif" alt="小狗" loading="lazy"></div>
           <p class="main-text">小狗亲自试过，</p>
           <p class="sub-text">真的很有效的哦</p>
         </div>
       </div>
 
-      <!-- 第7页 - 肩颈视频 -->
       <div class="page" data-page="6">
         <div class="content">
-          <div class="video-wrapper" id="shoulderWrapper">
-            <iframe
-              id="shoulderVideo"
-              src=""
-              scrolling="no"
-              allowfullscreen="true"
-              frameborder="0"
-              allow="autoplay; fullscreen"
-            ></iframe>
-          </div>
+          <div class="video-wrapper"><iframe id="shoulderVideo" src="" loading="lazy"></iframe></div>
           <p class="video-label">肩颈舒缓</p>
         </div>
       </div>
 
-      <!-- 第8页 - 肩颈完成 -->
       <div class="page" data-page="7">
         <div class="content">
-          <div class="dog-image">
-            <img src="image/嘿嘿.gif" alt="小狗">
-          </div>
+          <div class="dog-image"><img src="image/嘿嘿.gif" alt="小狗" loading="lazy"></div>
           <p class="main-text">瑶瑶超棒的～肩膀是不是松快一点啦</p>
         </div>
       </div>
 
-      <!-- 第9页 - 腰部预告 -->
       <div class="page" data-page="8">
         <div class="content">
-          <div class="dog-image">
-            <img src="image/啦啦啦.gif" alt="小狗">
-          </div>
+          <div class="dog-image"><img src="image/啦啦啦.gif" alt="小狗" loading="lazy"></div>
           <p class="main-text">接着来拉一拉坐酸了的腰吧</p>
         </div>
       </div>
 
-      <!-- 第10页 - 腰部视频 -->
       <div class="page" data-page="9">
         <div class="content">
-          <div class="video-wrapper" id="waistWrapper">
-            <iframe
-              id="waistVideo"
-              src=""
-              scrolling="no"
-              allowfullscreen="true"
-              frameborder="0"
-              allow="autoplay; fullscreen"
-            ></iframe>
-          </div>
+          <div class="video-wrapper"><iframe id="waistVideo" src="" loading="lazy"></iframe></div>
           <p class="video-label">腰部舒缓</p>
         </div>
       </div>
 
-      <!-- 第11页 - 腰部完成 -->
       <div class="page" data-page="10">
         <div class="content">
-          <div class="dog-image">
-            <img src="image/送你花花.gif" alt="小狗">
-          </div>
+          <div class="dog-image"><img src="image/送你花花.gif" alt="小狗" loading="lazy"></div>
           <p class="main-text">太厉害啦～腰是不是舒服多啦</p>
         </div>
       </div>
 
-      <!-- 第12页 - 胸部舒缓预告 -->
       <div class="page" data-page="11">
         <div class="content">
-          <div class="dog-image">
-            <img src="image/有我呢.gif" alt="小狗">
-          </div>
+          <div class="dog-image"><img src="image/有我呢.gif" alt="小狗" loading="lazy"></div>
           <p class="main-text">对啦～</p>
           <p class="text-line">要是胸口有点胀胀的不舒服</p>
           <p class="small-text">小狗有几个温柔的小办法哦</p>
         </div>
       </div>
 
-      <!-- 第13页 - 舒缓方法一：冷热交替敷 -->
       <div class="page" data-page="12">
         <div class="content">
           <p class="text-line">第一个小办法 · 冷热交替敷</p>
           <div class="heat-cold-container">
-            <div class="heat-item">
-              <img src="image/热水袋.png" alt="热水袋">
-              <span class="heat-label">3分钟</span>
-            </div>
-            <div class="heat-item">
-              <img src="image/毛巾.png" alt="毛巾">
-              <span class="heat-label">1分钟</span>
-            </div>
+            <div class="heat-item"><img src="image/热水袋.png" alt="热水袋" loading="lazy"><span class="heat-label">3分钟</span></div>
+            <div class="heat-item"><img src="image/毛巾.png" alt="毛巾" loading="lazy"><span class="heat-label">1分钟</span></div>
           </div>
           <p class="text-line">暖水袋温敷3分钟，冷水湿毛巾敷1分钟</p>
           <p class="text-line small">重复3轮，胀胀的感觉会轻很多哦</p>
         </div>
       </div>
 
-      <!-- 第14页 - 舒缓方法二：饮食轻轻调理 -->
       <div class="page" data-page="13">
         <div class="content">
-          <div class="dog-image">
-            <img src="image/吃饭饭.gif" alt="小狗">
-          </div>
+          <div class="dog-image"><img src="image/吃饭饭.gif" alt="小狗" loading="lazy"></div>
           <p class="text-line">少喝奶茶、可乐、浓茶哦</p>
           <p class="text-line">吃清淡少盐，胀感会悄悄减轻</p>
           <p class="text-line">平时吃点坚果，香蕉也有帮助呀</p>
@@ -470,34 +414,27 @@
         </div>
       </div>
 
-      <!-- 第15页 - 舒缓提醒：外用凝胶建议 -->
       <div class="page" data-page="14">
         <div class="content">
           <p class="main-text">还有一个小提醒呀</p>
-          <img class="gel-image" src="image/布洛芬凝胶.png" alt="凝胶">
+          <img class="gel-image" src="image/布洛芬凝胶.png" alt="凝胶" loading="lazy">
           <p class="text-line">要是胀感实在明显</p>
           <p class="text-line">可以问问医生能不能用外用凝胶</p>
           <p class="text-line small">一定要听医生的话使用哦</p>
         </div>
       </div>
 
-      <!-- 第16页 - 全部完成总结 -->
       <div class="page" data-page="15">
         <div class="content">
-          <div class="dog-image">
-            <img src="image/撒花花.gif" alt="小狗">
-          </div>
+          <div class="dog-image"><img src="image/撒花花.gif" alt="小狗" loading="lazy"></div>
           <p class="main-text">瑶瑶超厉害！全部都完成啦～</p>
           <p class="sub-text">今天也辛苦啦，好好歇一歇吧</p>
         </div>
       </div>
 
-      <!-- 第17页 - 收尾陪伴页 -->
       <div class="page" data-page="16">
         <div class="content">
-          <div class="dog-image">
-            <img src="image/喜欢.gif" alt="小狗">
-          </div>
+          <div class="dog-image"><img src="image/喜欢.gif" alt="小狗" loading="lazy"></div>
           <p class="main-text">现在有没有舒服一点呀？</p>
           <p class="sub-text">瑶瑶开心的话，小狗也会跟着开心哦</p>
         </div>
@@ -511,8 +448,8 @@
     const TOTAL_PAGES = 17;
     let currentPage = 0;
     let touchStartX = 0;
-    let musicPlaying = true;
-    let videoPlaying = false;
+    let musicPlaying = false;
+    let musicInitialized = false;
 
     const bgMusic = document.getElementById('bgMusic');
     const musicControl = document.getElementById('musicControl');
@@ -524,145 +461,149 @@
     const shoulderVideo = document.getElementById('shoulderVideo');
     const waistVideo = document.getElementById('waistVideo');
 
-    function toggleMusic() {
-      if (musicPlaying) {
-        bgMusic.pause();
-        musicIcon.textContent = '♪';
-        musicControl.classList.remove('playing');
-      } else {
-        bgMusic.play().catch(e => console.log('播放失败:', e));
-        musicIcon.textContent = '♫';
-        musicControl.classList.add('playing');
-      }
-      musicPlaying = !musicPlaying;
+    // 图片渐入效果
+    function initImageLoading() {
+      const images = document.querySelectorAll('.dog-image img, .gel-image');
+      images.forEach(img => {
+        if (img.complete) {
+          img.classList.add('loaded');
+        } else {
+          img.onload = () => img.classList.add('loaded');
+        }
+      });
     }
 
+    // 切换音乐
+    function toggleMusic() {
+      if (!musicInitialized) {
+        // 首次点击时初始化音频
+        bgMusic.load();
+        musicInitialized = true;
+      }
+
+      if (bgMusic.paused) {
+        const playPromise = bgMusic.play();
+        if (playPromise !== undefined) {
+          playPromise.then(() => {
+            musicPlaying = true;
+            musicIcon.textContent = '♫';
+            musicControl.classList.add('playing');
+          }).catch(e => console.log('播放失败:', e));
+        }
+      } else {
+        bgMusic.pause();
+        musicPlaying = false;
+        musicIcon.textContent = '♪';
+        musicControl.classList.remove('playing');
+      }
+    }
+
+    // 生成星星
     function createStars() {
       const starsContainer = document.getElementById('stars');
-      const starCount = Math.floor(Math.random() * 6) + 15;
+      const starCount = 15;
 
       for (let i = 0; i < starCount; i++) {
         const star = document.createElement('div');
         star.className = 'star';
         star.style.left = Math.random() * 100 + '%';
         star.style.top = Math.random() * 100 + '%';
-        star.style.width = (Math.floor(Math.random() * 9) + 6) + 'px';
-        star.style.height = star.style.width;
-        star.style.animationDelay = Math.random() * 5 + 's';
-        star.style.animationDuration = (Math.random() * 3 + 3) + 's';
+        const size = Math.floor(Math.random() * 9) + 6;
+        star.style.width = size + 'px';
+        star.style.height = size + 'px';
+        star.style.animationDelay = (Math.random() * 5) + 's';
+        star.style.animationDuration = (3 + Math.random() * 3) + 's';
         starsContainer.appendChild(star);
       }
     }
 
+    // 生成进度点
     function createProgressDots() {
       const container = document.getElementById('progressDots');
       container.innerHTML = '';
       for (let i = 0; i < TOTAL_PAGES; i++) {
         const dot = document.createElement('div');
         dot.className = 'progress-dot' + (i === currentPage ? ' active' : '');
-        dot.dataset.index = i;
         container.appendChild(dot);
       }
     }
 
+    // 页面切换
     function goToPage(index) {
       if (index < 0 || index >= TOTAL_PAGES) return;
 
-      if (currentPage === 6) {
-        shoulderVideo.src = '';
-      }
-      if (currentPage === 9) {
-        waistVideo.src = '';
-      }
+      // 离开视频页
+      if (currentPage === 6) shoulderVideo.src = '';
+      if (currentPage === 9) waistVideo.src = '';
 
       currentPage = index;
-      const pages = document.getElementById('pages');
-      pages.style.transform = `translateX(-${currentPage * 100}%)`;
+      document.getElementById('pages').style.transform = `translateX(-${currentPage * 100}%)`;
 
       document.querySelectorAll('.progress-dot').forEach((dot, i) => {
         dot.className = 'progress-dot' + (i === currentPage ? ' active' : '');
       });
 
-      const hint = document.getElementById('touchHint');
-      if (currentPage === TOTAL_PAGES - 1) {
-        hint.textContent = '右滑返回 · 点击重新开始';
-      } else {
-        hint.textContent = '点击任意处继续';
-      }
+      document.getElementById('touchHint').textContent =
+        currentPage === TOTAL_PAGES - 1 ? '右滑返回 · 点击重新开始' : '点击任意处继续';
 
+      // 入场动画
       document.querySelectorAll('.page')[currentPage].classList.add('page-enter');
 
+      // 进入视频页
       if (currentPage === 6) {
         shoulderVideo.src = SHOULDER_VIDEO_URL;
-        videoPlaying = true;
-        bgMusic.pause();
+        if (musicPlaying) bgMusic.pause();
       } else if (currentPage === 9) {
         waistVideo.src = WAIST_VIDEO_URL;
-        videoPlaying = true;
-        bgMusic.pause();
-      } else {
-        videoPlaying = false;
-        if (musicPlaying) {
-          bgMusic.play().catch(e => console.log('播放失败:', e));
-        }
+        if (musicPlaying) bgMusic.pause();
+      } else if (musicInitialized && musicPlaying && bgMusic.paused) {
+        bgMusic.play().catch(() => {});
       }
     }
 
     function nextPage() {
-      if (currentPage < TOTAL_PAGES - 1) {
-        goToPage(currentPage + 1);
-      } else {
-        goToPage(0);
-      }
+      goToPage(currentPage < TOTAL_PAGES - 1 ? currentPage + 1 : 0);
     }
 
     function prevPage() {
-      if (currentPage > 0) {
-        goToPage(currentPage - 1);
-      }
+      if (currentPage > 0) goToPage(currentPage - 1);
     }
 
-    document.addEventListener('touchstart', (e) => {
+    // 事件监听
+    document.addEventListener('touchstart', e => {
       touchStartX = e.touches[0].clientX;
     }, { passive: true });
 
-    document.addEventListener('touchend', (e) => {
+    document.addEventListener('touchend', e => {
       const deltaX = e.changedTouches[0].clientX - touchStartX;
       if (Math.abs(deltaX) > 50) {
-        if (deltaX < 0) {
-          nextPage();
-        } else {
-          prevPage();
-        }
+        deltaX < 0 ? nextPage() : prevPage();
       }
     }, { passive: true });
 
-    document.querySelector('.app').addEventListener('click', (e) => {
-      if (e.target.tagName === 'IFRAME' || e.target.closest('.music-control')) {
-        return;
-      }
+    document.querySelector('.app').addEventListener('click', e => {
+      if (e.target.tagName === 'IFRAME' || e.target.closest('.music-control')) return;
       nextPage();
     });
 
-    document.addEventListener('DOMContentLoaded', () => {
-      bgMusic.play().then(() => {
-        musicPlaying = true;
-        musicIcon.textContent = '♫';
-        musicControl.classList.add('playing');
-      }).catch(e => {
-        document.addEventListener('touchstart', function initMusic() {
-          bgMusic.play().then(() => {
-            musicPlaying = true;
-            musicIcon.textContent = '♫';
-            musicControl.classList.add('playing');
-          }).catch(err => console.log('播放失败:', err));
-          document.removeEventListener('touchstart', initMusic);
-        }, { once: true });
-      });
-    });
+    // 用户首次交互后自动播放音乐
+    document.addEventListener('touchstart', function initAudio() {
+      if (!musicInitialized) {
+        bgMusic.load();
+        musicInitialized = true;
+        bgMusic.play().then(() => {
+          musicPlaying = true;
+          musicIcon.textContent = '♫';
+          musicControl.classList.add('playing');
+        }).catch(() => {});
+      }
+      document.removeEventListener('touchstart', initAudio);
+    }, { once: true });
 
+    // 初始化
     createStars();
     createProgressDots();
+    initImageLoading();
     goToPage(0);
   </script>
 </body>
